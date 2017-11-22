@@ -19,15 +19,6 @@ class Article(models.Model):
     likes = models.IntegerField()
 
 
-class User(models.Model):
-    #default user model
-    user = models.OneToOneField(User, related_name='user')
-    #custom name 
-    fullName = models.TextField(default='', blank=True)
-    #custom phone number 
-    phone = models.CharField(max_length=20, blank=True, default='')
-
-
 class Comments (models.Model):
     #FK User
     user = models.ForeignKey('User')
