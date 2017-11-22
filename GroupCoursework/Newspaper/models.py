@@ -19,11 +19,11 @@ class Article(models.Model):
     likes = models.IntegerField()
 
 
-class Comments (models.Model):
+'''class Comments (models.Model):
     #FK User
     user = models.ForeignKey('User')
     #FK Article
     article = models.ForeignKey('Article')
     #User comment
-    commentContent = models.TextField()
+    commentContent = models.TextField()'''
 
