@@ -117,4 +117,5 @@ tests/report/
 *.sqlite3
 *.pyc
 
+/.vscode
 
