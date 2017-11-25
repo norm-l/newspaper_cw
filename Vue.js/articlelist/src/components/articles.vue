@@ -23,7 +23,7 @@
 <script>
   export default {
     name: 'articles',
-    data() {
+    data () {
       return {
         title: 'Article List',
         // Placeholder object with a few articles.
