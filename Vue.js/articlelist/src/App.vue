@@ -1,11 +1,13 @@
 <template>
   <div id="app">
+    <menubar></menubar>
     <articles></articles>
   </div>
 </template>
 
 <script>
 import articles from './components/articles'
+import menubar from './components/menu'
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -15,6 +17,7 @@ Vue.use(BootstrapVue)
 export default {
   name: 'app',
   components: {
+    menubar,
     articles
   }
 }
@@ -27,6 +30,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
