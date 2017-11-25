@@ -6,13 +6,13 @@
       <!-- Loop through the object finding all articles, attaching the classes to them -->
       <div v-for="article in articles" class="col-md-10 article-border">
         <!-- Article Title -->
-        <h1 v-text="article.title"></h1>
+        <h1 class="margin-top" v-text="article.title"></h1>
         <!-- Article Image -->
-        <img :src="article.image" class="pull-left img-responsive margin10 thumb img-thumbnail">
+        <img :src="article.image" class="float-left img-responsive margin10 thumb img-thumbnail">
         <!-- Article Content/Summary -->
         <p v-text="article.content"></p>
         <!-- Continue reading the full article -->
-        <a class="btn btn-success pull-right marginBottom10" :href="article.url">Continue Reading..</a>
+        <a class="btn btn-success float-right margin-bottom" :href="article.url">Continue Reading..</a>
       </div>
     </div>
     <!-- No articles were found therefore we display a simple message -->
@@ -55,5 +55,11 @@
 .margin10 {
    margin-bottom: 10px;
    margin-right: 10px;
+}
+.margin-bottom {
+  margin-bottom: 10px;
+}
+.margin-top {
+  margin-top: 10px;
 }
 </style>

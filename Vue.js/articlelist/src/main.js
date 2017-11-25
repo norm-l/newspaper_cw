@@ -12,4 +12,4 @@ new Vue({
   components: { App }
 })
 
-require('../node_modules/bootstrap/less/bootstrap.less')
+// require('../node_modules/bootstrap/less/bootstrap.less')
