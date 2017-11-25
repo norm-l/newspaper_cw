@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin, BaseUserManager
 
 
@@ -14,7 +15,7 @@ class MyUserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-            role=role,
+            date_of_birth=date_of_birth,
         )
 
         user.set_password(password)
@@ -28,48 +29,57 @@ class MyUserManager(BaseUserManager):
         """
         user = self.create_user(
             email,
-            role=None,
             password=password,
+            date_of_birth=date_of_birth,
         )
         user.is_admin = True
         user.save(using=self._db)
         return user
 
-class User(AbstractBaseUser,PermissionsMixin):
-	name = models.CharField(('Name'),max_length=30, blank=True, null=True)
-	phone_no = models.IntegerField(max_length=30,blank=True, null=True)
-	email = models.EmailField(('email address'), max_length=155,unique=True, null=True, blank=True)
-	is_active = models.BooleanField(('active'), default=True, help_text=_('Designates whether this user should be treated as active. Unselect this instead of deleting accounts.'))
-	created_on = models.DateTimeField(('Date joined'), default=timezone.now)
 
+class User(AbstractBaseUser):
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
+    name = models.CharField(max_length=50,null=True,blank=True)
+    Phone = models.BigIntegerField(null=True,blank=True)
+    created = models.DateTimeField(default=timezone.now)
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
 
-	USERNAME_FIELD = 'email'
-	REQUIRED_FIELDS = []
+    objects = MyUserManager()
 
-	objects = MyUserManager()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
-	class Meta:
-	    verbose_name = 'user'
-	    verbose_name_plural = 'users'
+    def get_full_name(self):
+        # The user is identified by their email address
+        return self.email
 
-	def get_full_name(self):
-	    full_name = '%s %s' % (self.first_name, self.last_name)
-	    return full_name.strip()
+    def get_short_name(self):
+        # The user is identified by their email address
+        return self.email
 
-	def get_short_name(self):
-	    return self.first_name
+    def __str__(self):              # __unicode__ on Python 2
+        return self.email
 
-	def get_email(self):
-	    if self.email is not None:
-	        return self.email
-	    return None
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
 
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
 
-
-	@property
-	def is_staff(self):
-	    return self.is_superuser
-
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        # Simplest possible answer: All admins are staff
+        return self.is_admin
 
 class Article(models.Model):
     # The title of the Article
