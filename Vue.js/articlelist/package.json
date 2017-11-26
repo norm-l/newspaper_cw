@@ -12,6 +12,7 @@
   "dependencies": {
     "bootstrap-vue": "^1.2.0",
     "vue": "^2.5.2",
+    "vue-awesome": "^2.3.4",
     "vue-material-design-icons": "^0.7.1"
   },
   "devDependencies": {
