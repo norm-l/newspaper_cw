@@ -7,11 +7,11 @@
         <!-- Article Title -->
         <h2 class="mt-3" v-text="article.title" />
         <!-- Article Information -->
-        <p>
+        <p class="text-muted">
           <icon name="calendar" class="mr-1"/>
-          <small class="text-muted" v-text="article.date"/>
+          <small v-text="article.date"/>
           <icon name="user" class="ml-1 mr-1"/>
-          <small class="text-muted" v-text="article.author"/>
+          <small v-text="article.author"/>
         </p>
         <!-- Article Content -->
         <div class="row">
@@ -41,7 +41,6 @@
     name: 'articles',
     data () {
       return {
-        title: 'Article List',
         // Placeholder object with a few articles.
         articles: {
           article1: {title: 'Article Title 1', author: 'Author1', date: 'February 2, 2017', content: 'Small text example', url: '', image: './src/assets/default.png', tags: ['finance', 'stocks']},
