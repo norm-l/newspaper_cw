@@ -4,4 +4,8 @@ from django.http import HttpResponse
 # Create your views here.
 def index(request):
     return render(request, 'Newspaper/index.html')
+
+
+def article(request):
+	return render(request,'Newspaper/single.html')
 	
