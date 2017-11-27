@@ -12,7 +12,7 @@ def index(request):
 
 
 def article(request):
-	return render(request,'Newspaper/single.html')
+	return render(request,'Newspaper/single.html',{'data':request.POST})
 	
 # Web API
 
