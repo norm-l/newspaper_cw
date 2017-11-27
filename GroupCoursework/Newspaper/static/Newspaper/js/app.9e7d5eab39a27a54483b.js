@@ -40,7 +40,9 @@ webpackJsonp([1], {
                         }
                     }
                 },
-                methods: {}
+                methods: {
+
+                }
             },
             l = function() {
                 var e = this,
@@ -70,10 +72,10 @@ webpackJsonp([1], {
                         domProps: {
                             textContent: e._s(t.content)
                         }
-                    }), e._v(" "), i("a", {
+                    }), e._v(" "), i("button", {
                         staticClass: "btn btn-success pull-right marginBottom10",
                         attrs: {
-                            href: t.url
+                            onclick:'trg(' + e._s(t) +')'
                         }
                     }, [e._v("Continue Reading..")])])
                 })) : i("div", [e._v("No Articles Found!")])])
