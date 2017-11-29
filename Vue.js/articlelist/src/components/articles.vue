@@ -12,7 +12,7 @@
           <small v-text="article.pub_date"/>
           <icon name="user" class="ml-1 mr-1"/>
           <small v-text="article.author"/>
-          <icon name="bookmark" class="ml-1 mr-1"/>
+          <icon name="bookmark-o" class="ml-1 mr-1"/>
           <small v-text="article.category"/>
         </p>
         <!-- Article Content -->
@@ -30,7 +30,7 @@
           <!-- Article Tags -->
           <li>
             <icon name="tags"/>
-            <span class="badge badge-info ml-1" v-text="article.tags"/>
+            <span v-for="tag in splitTags(article.tags)" class="badge badge-info ml-1" v-text="tag"/>
           </li>
           <!-- Article Likes -->
           <li>
@@ -49,8 +49,6 @@
   </div>
 </template>
 
-<!-- <span v-for="tag in article.tags" class="badge badge-info ml-1" v-text="tag"/> When a list is implemented -->
-
 <script>
 import axios from 'axios';
   export default {
@@ -58,7 +56,7 @@ import axios from 'axios';
     data () {
       return {articles:[]}
       // For local use:
-      // return {articles:[{title: 'title1', author: 'author1', pub_date: 'February 2, 2017', content: 'Small text example', category: 'business', likes: 10, article_img: './src/assets/default.png', tags: 'test'}]}
+      // return {articles:[{title: 'title1', author: 'author1', pub_date: 'February 2, 2017', content: 'Small text example', category: 'business', likes: 10, article_img: './src/assets/default.png', tags: 'test, wow, nice'}]}
     },
     mounted: function() {
       axios.get("/api/latestarticles")
@@ -68,6 +66,9 @@ import axios from 'axios';
       })
     },
     methods: {
+      splitTags(tags) {
+        return tags.split(', ');
+      }
     }
   }
 </script>
