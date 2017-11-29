@@ -88,13 +88,20 @@ class Article(models.Model):
     author = models.CharField(max_length=255)
     # The actual article content
     content = models.TextField()
+    # Article image URL
+    article_img = models.CharField(max_length=255)
     # Publication date
     pub_date = models.DateTimeField('publication date')
     # The category of the article
     category = models.CharField(max_length=255)
     # The amount of likes for the article
     likes = models.IntegerField()
+    # Tags TODO: Make this a list of strings
+    tags = models.CharField(max_length=255)
 
+    # Article objects are named by their title
+    def __str__(self):
+        return self.title
 
 class Comments (models.Model):
     #FK User
@@ -103,4 +110,3 @@ class Comments (models.Model):
     article = models.ForeignKey('Article')
     #User comment
     commentContent = models.TextField()
-
