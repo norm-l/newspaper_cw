@@ -1,6 +1,6 @@
 <template>
   <div class="articles">
-    <button>Test</button>
+    <button v-on:click="testAPI">Test</button>
     <!-- Check if there are any articles in the object. -->
     <div v-if="Object.keys(articles).length !== 0" class="center-block">
       <!-- Loop through the object finding all articles, attaching the classes to them -->
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
   export default {
     name: 'articles',
     data () {
@@ -51,6 +53,11 @@
       }
     },
     methods: {
+      testAPI: function(e) {
+        axios.get("/api/latestarticles").then((response) => {
+          console.log(response.data);
+        });
+      }
     }
   }
 
