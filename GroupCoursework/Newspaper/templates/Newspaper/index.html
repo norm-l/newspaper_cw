@@ -5,7 +5,7 @@
       <meta charset=utf-8>
       <meta name=viewport content="width=device-width,initial-scale=1">
       <title>articlelist</title>
-      <link href="{% static 'Newspaper/css/app.805a03724433247c44ba56b1370738cd.css' %}" rel=stylesheet>
+      <link href="{% static 'Newspaper/css/app.css' %}" rel=stylesheet>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
       <script>
       function trg(article){
@@ -20,15 +20,15 @@
             csrfmiddlewaretoken: '{{ csrf_token }}',
           },
        success: function(response){
-                     $('#app').html(response) 
+                     $('#app').html(response)
                     }});
       }
       </script>
    </head>
    <body>
       <div id="app"></div>
-      <script type=text/javascript src="{% static 'Newspaper/js/manifest.62e670c0754c38d1d55f.js' %}"></script>
-      <script type=text/javascript src="{% static 'Newspaper/js/vendor.9d9188334502c184a108.js' %}"></script>
-      <script type=text/javascript src="{% static 'Newspaper/js/app.9e7d5eab39a27a54483b.js' %}"></script>
+      <script type=text/javascript src="{% static 'Newspaper/js/manifest.js' %}"></script>
+      <script type=text/javascript src="{% static 'Newspaper/js/vendor.js' %}"></script>
+      <script type=text/javascript src="{% static 'Newspaper/js/app.js' %}"></script>
    </body>
 </html>

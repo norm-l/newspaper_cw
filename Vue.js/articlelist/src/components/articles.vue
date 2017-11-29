@@ -1,5 +1,6 @@
 <template>
   <div class="articles">
+    <button>Test</button>
     <!-- Check if there are any articles in the object. -->
     <div v-if="Object.keys(articles).length !== 0" class="center-block">
       <!-- Loop through the object finding all articles, attaching the classes to them -->
@@ -43,8 +44,8 @@
       return {
         // Placeholder object with a few articles.
         articles: {
-          article1: {title: 'Article Title 1', author: 'Author1', date: 'February 2, 2017', content: 'Small text example', url: '', image: './src/assets/default.png', tags: ['finance', 'stocks']},
-          article2: {title: 'Article Title 2', author: 'Author2', date: 'February 12, 2017', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit consequat leo fermentum condimentum. Fusce in eros malesuada, tincidunt felis eget, dignissim nisl. Integer vitae auctor nibh. Integer accumsan mauris eu nulla interdum scelerisque. Sed lacinia vitae augue et aliquet. Suspendisse ultrices felis in turpis consequat, sed pellentesque augue pellentesque. Aliquam erat volutpat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis in enim quis est condimentum finibus. Suspendisse quis lacus dolor. Morbi ut enim eu lorem varius fringilla.', url: '', image: './src/assets/default.png', tags: ['health', 'research']},
+          article1: {title: 'Article Title 1', author: 'Author1', date: 'February 2, 2017', content: 'Small text example', url: '', image: './static/Newspaper/img/default.png', tags: ['finance', 'stocks']},
+          article2: {title: 'Article Title 2', author: 'Author2', date: 'February 12, 2017', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit consequat leo fermentum condimentum. Fusce in eros malesuada, tincidunt felis eget, dignissim nisl. Integer vitae auctor nibh. Integer accumsan mauris eu nulla interdum scelerisque. Sed lacinia vitae augue et aliquet. Suspendisse ultrices felis in turpis consequat, sed pellentesque augue pellentesque. Aliquam erat volutpat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis in enim quis est condimentum finibus. Suspendisse quis lacus dolor. Morbi ut enim eu lorem varius fringilla.', url: "{% static 'Newspaper/img/default.png' %}", image: 'default.png', tags: ['health', 'research']},
           article3: {title: 'Article Title 3', author: 'Author3', date: 'February 20, 2017', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum hendrerit consequat leo fermentum condimentum. Fusce in eros malesuada, tincidunt felis eget, dignissim nisl. Integer vitae auctor nibh. Integer accumsan mauris eu nulla interdum scelerisque. Sed lacinia vitae augue et aliquet. Suspendisse ultrices felis in turpis consequat, sed pellentesque augue pellentesque. Aliquam erat volutpat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis in enim quis est condimentum finibus. Suspendisse quis lacus dolor. Morbi ut enim eu lorem varius fringilla.', url: '', image: './src/assets/default.png', tags: ['technology', 'ai']}
         }
       }
@@ -52,6 +53,8 @@
     methods: {
     }
   }
+
+
 </script>
 
 <style scoped>
