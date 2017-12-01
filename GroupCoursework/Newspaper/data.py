@@ -9,7 +9,7 @@ def GetLatestArticles():
 
 # Gets all the articles ordered chronologically
 def GetAllArticles():
-    articles = Article.objects.all()
+    articles = Article.objects.all().order_by('-pub_date')
     return articles
 
 # Gets the single article by Id
