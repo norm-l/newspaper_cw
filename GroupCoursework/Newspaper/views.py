@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from django.contrib.auth import authenticate,login
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -39,3 +40,15 @@ def get_article(request, pk):
             return Response(serializer.data)
     except:
         return Response(status=400)
+
+def authentication(request):
+    
+    email=request.POST.get('email')
+    password = request.POST.get('password')
+    user = authenticate(username=email,password=password)
+	
+    if user.is_authenticate():
+	login(request,user)
+	return redirect('')
+    else:
+        return render(request,'index.html',{'errors':'user is not defined'})
