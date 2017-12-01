@@ -17,15 +17,41 @@ def article(request):
 	
 # Web API
 
+
+@api_view(['GET'])
+def get_articles(request):
+    """
+    Gets all articles
+    """
+    if(request.method == 'GET'):
+        articles = GetAllArticles()
+        serializer = ArticleSerializer(articles, many=True)
+        return Response(serializer.data)
+
+
 @api_view(['GET'])
 def get_latest_articles(request):
     """
     Get the latest articles, limited to 10
     """
     if request.method == 'GET':
-        articles = GetLatestArticles()
-        serializer = ArticleSerializer(articles, many=True)
-        return Response(serializer.data)
+        
+        query = ExtractCategory(request.query_params)
+        articles = None
+        if(query != None):
+            # We got query Parameters   
+            articles = GetLatestArticlesByCategory(query)
+        else:
+            # Return the latest Articles
+            articles = GetLatestArticles()
+            serializer = ArticleSerializer(articles, many=True)
+            
+        if(articles != None):
+            serializer = ArticleSerializer(articles, many = True)
+            return Response(serializer.data)
+        else:
+            return Response(status=400)
+
 
 @api_view(['GET'])
 def get_article(request, pk):
@@ -41,6 +67,8 @@ def get_article(request, pk):
     except:
         return Response(status=400)
 
+
+
 def authentication(request):
     
     email=request.POST.get('email')
@@ -48,15 +76,15 @@ def authentication(request):
     user = authenticate(username=email,password=password)
 	
     if user.is_authenticated():
-	login(request,user)
-	return redirect('/')
+	    login(request,user)
+	    return redirect('/')
     else:
         return render(request,'index.html',{'errors':'user is not defined'})
 
 def register(request):
     serializer = RegisterSerializer(data=request.POST)
     if serializer.is_valid():
-	serializer.save()
+	    serializer.save()
     else:
-	return render(request,'index.html',{'errors':serializer.errors})
+	    return render(request,'index.html',{'errors':serializer.errors})
     return redirect('/')
