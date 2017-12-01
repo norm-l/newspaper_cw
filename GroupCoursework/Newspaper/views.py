@@ -23,9 +23,19 @@ def get_articles(request):
     """
     Gets all articles
     """
-    if(request.method == 'GET'):
-        articles = GetAllArticles()
-        serializer = ArticleSerializer(articles, many=True)
+    if request.method == 'GET':
+        
+        query = ExtractCategory(request.query_params)
+        articles = None
+        if(query != None):
+            # We got query Parameters   
+            articles = GetLatestArticlesByCategory(query)
+        else:
+            # Return the latest Articles
+            articles = GetAllArticles()
+            serializer = ArticleSerializer(articles, many=True)
+            
+        serializer = ArticleSerializer(articles, many = True)
         return Response(serializer.data)
 
 
@@ -46,11 +56,8 @@ def get_latest_articles(request):
             articles = GetLatestArticles()
             serializer = ArticleSerializer(articles, many=True)
             
-        if(articles != None):
-            serializer = ArticleSerializer(articles, many = True)
-            return Response(serializer.data)
-        else:
-            return Response(status=400)
+        serializer = ArticleSerializer(articles, many = True)
+        return Response(serializer.data)
 
 
 @api_view(['GET'])
