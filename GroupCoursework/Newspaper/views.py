@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from Newspaper.data import *
+from .forms import *
 from Newspaper.serializers import ArticleSerializer
 
 # Create your views here.
@@ -52,3 +53,11 @@ def authentication(request):
 	return redirect('/')
     else:
         return render(request,'index.html',{'errors':'user is not defined'})
+
+def register(request):
+    form = RegisterForm(data=request.POST)
+    if form.is_valid():
+	form.save()
+    else:
+	return render(request,'index.html',{'errors':form.errors})
+    return redirect('/')
