@@ -47,8 +47,8 @@ def authentication(request):
     password = request.POST.get('password')
     user = authenticate(username=email,password=password)
 	
-    if user.is_authenticate():
+    if user.is_authenticated():
 	login(request,user)
-	return redirect('')
+	return redirect('/')
     else:
         return render(request,'index.html',{'errors':'user is not defined'})
