@@ -75,7 +75,7 @@ def get_article(request, pk):
         return Response(status=400)
 
 
-
+@api_view(['POST'])
 def authentication(request):
     
     email=request.POST.get('email')
@@ -88,6 +88,7 @@ def authentication(request):
     else:
         return render(request,'index.html',{'errors':'user is not defined'})
 
+@api_view(['POST'])
 def register(request):
     serializer = RegisterSerializer(data=request.POST)
     if serializer.is_valid():
