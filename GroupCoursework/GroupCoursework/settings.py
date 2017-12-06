@@ -25,33 +25,39 @@ SECRET_KEY = '6c&$l7%3rr=c2q@-t$mu!6gsr0t$4=kf5p#=9dh+#ozj(qiy25'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
-
+CORS_ORIGIN_ALLOW_ALL=True
 # Application definition
 
 INSTALLED_APPS = [
-    'Newspaper.apps.NewspaperConfig',
+    
+    # 'Newspaper.apps.NewspaperConfig',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
+    'Newspaper',
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
 ]
 
 ROOT_URLCONF = 'GroupCoursework.urls'
+CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {
@@ -71,6 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'GroupCoursework.wsgi.application'
 
+AUTH_USER_MODEL = 'Newspaper.MyUser'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
