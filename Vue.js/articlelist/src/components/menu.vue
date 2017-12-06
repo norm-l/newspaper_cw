@@ -62,6 +62,10 @@
 
 <script>
 import axios from 'axios';
+import cookies from 'cookies-js';
+var csrftoken = 'not-loaded';
+console.log(csrftoken);
+
 export default {
   name: 'menubar',
   data() {
@@ -77,6 +81,10 @@ export default {
       }
     }
   },
+  created() {
+    csrftoken = cookies.get('csrftoken');
+    console.log(csrftoken);
+  },
   methods: {
     toggleSub: function(event) {
       this.isSubHidden = !this.isSubHidden
@@ -84,7 +92,22 @@ export default {
     LogIn: function(event) {
       event.preventDefault();
       console.log(JSON.stringify(this.form));
-      this.loggedIn = true
+
+      var config = {headers :
+        {'content-type': 'application/json',
+         'X-CSRFToken': csrftoken},
+         auth: {
+           username: this.user.email,
+           password: this.user.password}
+         };
+      axios.post('/login', JSON.stringify(this.user), config)
+        .then(function(response) {
+          this.loggedIn = true
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
     LogOut: function(event) {
       this.loggedIn = false;
@@ -107,7 +130,11 @@ export default {
     },
     handleSubmit() {
       console.log("Register")
-      axios.post('/user', JSON.stringify(this.user))
+      console.log(JSON.stringify(this.user))
+      var config = {headers :
+        {'content-type': 'application/json',
+         'X-CSRFToken': csrftoken}};
+      axios.post('/register', JSON.stringify(this.user), config)
         .then(function(response) {
           console.log(response);
         })
@@ -178,6 +205,3 @@ export default {
   transform: rotate(45deg);
 }
 </style>
-
-
-

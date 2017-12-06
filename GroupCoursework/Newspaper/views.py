@@ -2,10 +2,15 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate,login
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 from Newspaper.data import *
 from Newspaper.serializers import ArticleSerializer,RegisterSerializer
+from rest_framework.parsers import JSONParser
+import json
+import ast
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 # Create your views here.
 def index(request):
@@ -14,7 +19,7 @@ def index(request):
 
 def article(request):
 	return render(request,'Newspaper/single.html',{'data':request.POST})
-	
+
 # Web API
 
 
@@ -24,17 +29,17 @@ def get_articles(request):
     Gets all articles
     """
     if request.method == 'GET':
-        
+
         query = ExtractCategory(request.query_params)
         articles = None
         if(query != None):
-            # We got query Parameters   
+            # We got query Parameters
             articles = GetLatestArticlesByCategory(query)
         else:
             # Return the latest Articles
             articles = GetAllArticles()
             serializer = ArticleSerializer(articles, many=True)
-            
+
         serializer = ArticleSerializer(articles, many = True)
         return Response(serializer.data)
 
@@ -45,17 +50,17 @@ def get_latest_articles(request):
     Get the latest articles, limited to 10
     """
     if request.method == 'GET':
-        
+
         query = ExtractCategory(request.query_params)
         articles = None
         if(query != None):
-            # We got query Parameters   
+            # We got query Parameters
             articles = GetLatestArticlesByCategory(query)
         else:
             # Return the latest Articles
             articles = GetLatestArticles()
             serializer = ArticleSerializer(articles, many=True)
-            
+
         serializer = ArticleSerializer(articles, many = True)
         return Response(serializer.data)
 
@@ -74,14 +79,20 @@ def get_article(request, pk):
     except:
         return Response(status=400)
 
+    
 
 @api_view(['POST'])
+# @authentication_classes((SessionAuthentication, BasicAuthentication))
+# @permission_classes((IsAuthenticated,))
 def authentication(request):
-    
-    email=request.POST.get('email')
-    password = request.POST.get('password')
+    # authentication_classes = (SessionAuthentication, BasicAuthentication)
+    # # permission_classes = (IsAuthenticated,)
+    print(request.data)
+    email = request.user.name
+    password = request.user.password
+    print("logging in with:", email, "|", password)
     user = authenticate(username=email,password=password)
-	
+
     if user.is_authenticated():
 	    login(request,user)
 	    return redirect('/')
@@ -90,9 +101,10 @@ def authentication(request):
 
 @api_view(['POST'])
 def register(request):
-    serializer = RegisterSerializer(data=request.POST)
+    data = request.data
+    serializer = RegisterSerializer(data=data)
     if serializer.is_valid():
 	    serializer.save()
     else:
-	    return render(request,'index.html',{'errors':serializer.errors})
-    return redirect('/')
+	    return Response(status=500)
+    return Response(status=200)

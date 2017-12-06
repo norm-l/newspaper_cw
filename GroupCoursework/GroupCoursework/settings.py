@@ -31,7 +31,7 @@ CORS_ORIGIN_ALLOW_ALL=True
 # Application definition
 
 INSTALLED_APPS = [
-    
+
     # 'Newspaper.apps.NewspaperConfig',
     'corsheaders',
     'django.contrib.admin',
@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'rest_framework',
     'Newspaper',
 ]
@@ -77,7 +76,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'GroupCoursework.wsgi.application'
 
-AUTH_USER_MODEL = 'Newspaper.MyUser'
+AUTH_USER_MODEL = 'Newspaper.User'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -122,6 +121,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework.authentication.BasicAuthentication',
+#         'rest_framework.authentication.SessionAuthentication',
+#     )
+# }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
