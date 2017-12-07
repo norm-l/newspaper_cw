@@ -1,7 +1,7 @@
 # serializers.py holds the Rest Framework serializers that are used for our Newspaper App
 
 from rest_framework import serializers
-from .models import Article,User
+from .models import Article,User,Comments
 
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,5 +25,5 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comment
+        model = Comments
         fields = "__all__"
