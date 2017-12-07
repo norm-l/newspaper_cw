@@ -111,7 +111,7 @@ def register(request):
 
 
 @api_view(['POST'])
-def register(request):
+def comment(request):
     data=request.data
     serializer = CommentSerializer(data=data)
     if serializer.is_valid():
