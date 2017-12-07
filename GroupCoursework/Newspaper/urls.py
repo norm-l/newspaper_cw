@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^api/article/(?P<pk>[0-9]*)', views.get_article, name='get_article'),
     url(r'^login$',views.authentication,name='login'),
     url(r'^register$',views.register,name='register'),
+    url(r'^comment$',views.comment,name='comment'),
 
 ]
