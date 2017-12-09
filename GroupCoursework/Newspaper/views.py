@@ -3,15 +3,14 @@ from django.contrib.auth import authenticate, login
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from Newspaper.serializers import ArticleSerializer, RegisterSerializer
+from Newspaper.data import *
 # UNUSED:
 # from django.http import HttpResponse
 # from rest_framework import status
-# from Newspaper.data import *
 # from rest_framework.parsers import JSONParser
 # from django.views.decorators.csrf import csrf_exempt, csrf_protect
 # from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
-# Create your views here.
 
 def index(request):
     return render(request, 'Newspaper/index.html')
