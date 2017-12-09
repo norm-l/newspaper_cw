@@ -22,7 +22,7 @@
             <!-- Article Image -->
             <img :src="article.article_img" class="float-left img-responsive mr-3 thumb img-thumbnail">
             <!-- Article Summary -->
-            <p v-text="article.content" />
+            <p v-text="article.headline" />
           </div>
         </div>
         <!-- Continue reading the full article -->

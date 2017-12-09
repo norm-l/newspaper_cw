@@ -86,6 +86,8 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     # The author of the Article
     author = models.CharField(max_length=255)
+    # The headline of the article
+    headline = models.TextField(max_length=400)
     # The actual article content
     content = models.TextField()
     # Article image URL
