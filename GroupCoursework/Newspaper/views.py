@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from Newspaper.serializers import ArticleSerializer, RegisterSerializer
+from Newspaper.serializers import ArticleSerializer, RegisterSerializer, CommentSerializer
 from Newspaper.data import *
 # UNUSED:
 # from django.http import HttpResponse
@@ -80,22 +80,19 @@ def get_article(request, pk):
 
 
 @api_view(['POST'])
-# @authentication_classes((SessionAuthentication, BasicAuthentication))
-# @permission_classes((IsAuthenticated,))
 def authentication(request):
-    # authentication_classes = (SessionAuthentication, BasicAuthentication)
-    # # permission_classes = (IsAuthenticated,)
-    print(request.data)
-    email = request.user.name
+    email = request.user.email
     password = request.user.password
     print("logging in with:", email, "|", password)
     user = authenticate(username=email, password=password)
 
-    if user.is_authenticated():
-        login(request, user)
-        return redirect('/')
-    else:
-        return render(request, 'index.html', {'errors': 'user is not defined'})
+    if user:
+        print("Authenticated!")
+        # login(request, user)
+    #     return redirect('/')
+    # else:
+    #     return render(request, 'index.html', {'errors': 'user is not defined'})
+    return Response(status=500)
 
 
 @api_view(['POST'])
