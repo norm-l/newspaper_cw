@@ -116,3 +116,13 @@ def comment(request):
     else:
         return Response(status=500)
     return Response(status=200)
+
+@api_view(['POST'])
+def like(request):
+    data = request.data
+    serializer = LikesSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        return Response(status=500)
+    return Response(status=200)
