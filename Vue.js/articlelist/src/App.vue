@@ -14,7 +14,9 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-material-design-icons/styles.css'
 import 'vue-awesome/icons'
+import VueSession from 'vue-session'
 
+Vue.use(VueSession)
 Vue.use(BootstrapVue)
 export default {
   name: 'app',

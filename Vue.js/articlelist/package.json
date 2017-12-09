@@ -15,7 +15,8 @@
     "cookies-js": "^1.2.3",
     "vue": "^2.5.2",
     "vue-awesome": "^2.3.4",
-    "vue-material-design-icons": "^0.7.1"
+    "vue-material-design-icons": "^0.7.1",
+    "vue-session": "^0.9.10"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

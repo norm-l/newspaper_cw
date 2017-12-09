@@ -69,7 +69,6 @@ def get_article(request, pk):
     """
     Get one article by referencing the primary key
     """
-
     try:
         if request.method == 'GET':
             article = GetArticleById(pk)
@@ -81,18 +80,20 @@ def get_article(request, pk):
 
 @api_view(['POST'])
 def authentication(request):
-    email = request.user.email
-    password = request.user.password
-    print("logging in with:", email, "|", password)
-    user = authenticate(username=email, password=password)
+    if request.method == 'POST':
+        email = request.user.email
+        password = request.user.password
 
-    if user:
-        print("Authenticated!")
-        # login(request, user)
-    #     return redirect('/')
-    # else:
-    #     return render(request, 'index.html', {'errors': 'user is not defined'})
-    return Response(status=500)
+        print("logging in with:", email, "|", password)
+        user = authenticate(email=email, password=password)
+
+        if user is not None:
+            print("Authenticated!")
+            login(request, user)
+        #     return redirect('/')
+        # else:
+        #     return render(request, 'index.html', {'errors': 'user is not defined'})
+    return Response(status=403)
 
 
 @api_view(['POST'])
