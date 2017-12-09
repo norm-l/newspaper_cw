@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "bootstrap-vue": "^1.2.0",
+    "cookies-js": "^1.2.3",
     "vue": "^2.5.2",
     "vue-awesome": "^2.3.4",
     "vue-material-design-icons": "^0.7.1"
