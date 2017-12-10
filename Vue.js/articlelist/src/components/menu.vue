@@ -60,12 +60,13 @@
 
 
 <script>
-import axios from 'axios';
-import cookies from 'cookies-js';
-var csrftoken = 'not-loaded';
+import axios from "axios";
+import cookies from "cookies-js";
+import Vue from "vue";
+var csrftoken = "not-loaded";
 
 export default {
-  name: 'menubar',
+  name: "menubar",
   data() {
     return {
       isSubHidden: true,
@@ -73,42 +74,46 @@ export default {
       user: { email: "", password: "", name: "", phone: "" },
       // Placeholder object with a few articles.
       categories: {
-        category1: { id: 0, name: 'Business' },
-        category2: { id: 1, name: 'Politics' },
-        category3: { id: 2, name: 'Technology' }
-      },
-    }
+        category1: { id: 0, name: "Business" },
+        category2: { id: 1, name: "Politics" },
+        category3: { id: 2, name: "Technology" }
+      }
+    };
   },
   created() {
-    csrftoken = cookies.get('csrftoken');
+    csrftoken = cookies.get("csrftoken");
+    if (this.$session.exists()) {
+      this.user = this.$session.get("user");
+      this.loggedIn = true;
+    }
   },
-  props: ['cat'],
+  props: ["cat"],
   methods: {
     toggleSub: function(event) {
-      this.isSubHidden = !this.isSubHidden
+      this.isSubHidden = !this.isSubHidden;
     },
     LogIn: function(event) {
       event.preventDefault();
-
-      var config = {headers :
-        {'content-type': 'application/json',
-         'X-CSRFToken': csrftoken},
-         auth: {
-           username: this.user.email,
-           password: this.user.password}
-         };
-      axios.post('/login', JSON.stringify(this.user), config)
-        .then(function(response) {
-          
-          console.log("response.data.token: ", response.data.token)
-
-          if(response.status === 200 && 'token' in response.data) {
-            this.$session.start()
-            this.$session.set('jwt', response.data.token)
-            Vue.http.headers.common['Autherization'] = 'Bearer ' + response.data.token
-
-            console.log("Logged in!: ", response);
-            this.loggedIn = true
+      var config = {
+        headers: {
+          "content-type": "application/json",
+          "X-CSRFToken": csrftoken
+        },
+        auth: {
+          username: this.user.email,
+          password: this.user.password
+        }
+      };
+      axios
+        .post("/login", JSON.stringify(this.user), config)
+        .then(response => {
+          if (response.status === 200 && "token" in response.data) {
+            this.$session.start();
+            this.$session.set("jwt", response.data.token);
+            this.$session.set("user", this.user);
+            axios.defaults.headers.common["Authorization"] =
+              "Bearer " + response.data.token;
+            this.loggedIn = true;
           }
         })
         .catch(function(error) {
@@ -117,44 +122,48 @@ export default {
     },
     LogOut: function(event) {
       this.loggedIn = false;
-      this.clearName()
+      this.clearName();
+      this.$session.destroy();
     },
     clearName() {
-      this.user.name = ''
-      this.user.password = ''
-      this.user.name = ''
-      this.user.phone = ''
+      this.user.name = "";
+      this.user.password = "";
+      this.user.name = "";
+      this.user.phone = "";
     },
     handleOk(evt) {
       // Prevent modal from closing
-      evt.preventDefault()
+      evt.preventDefault();
       if (!this.user.email) {
-        alert('Please enter your email')
+        alert("Please enter your email");
       } else {
-        this.handleSubmit()
+        this.handleSubmit();
       }
     },
     handleSubmit() {
-      var config = {headers :
-        {'content-type': 'application/json',
-         'X-CSRFToken': csrftoken}};
-      axios.post('/register', JSON.stringify(this.user), config)
+      var config = {
+        headers: {
+          "content-type": "application/json",
+          "X-CSRFToken": csrftoken
+        }
+      };
+      axios
+        .post("/register", JSON.stringify(this.user), config)
         .then(function(response) {
           console.log(response);
         })
         .catch(function(error) {
           console.log(error);
         });
-      this.clearName()
-      this.$refs.modal.hide()
+      this.clearName();
+      this.$refs.modal.hide();
     },
-    FilterCategory(category){
+    FilterCategory(category) {
       console.log("Emmiting");
-      this.$emit('categoryChanged', category);
+      this.$emit("categoryChanged", category);
     }
-
   }
-}
+};
 </script>
 
 <style scoped>
@@ -175,7 +184,6 @@ export default {
   background-color: black;
 }
 
-
 .hover-element {
   display: inline-block;
   background: #a5a5a5;
@@ -184,7 +192,7 @@ export default {
   font-size: 18pt;
 }
 
-.hover-element>a {
+.hover-element > a {
   color: black;
 }
 
@@ -192,10 +200,9 @@ export default {
   background-color: #328afc;
 }
 
-.hover-element:hover>a {
+.hover-element:hover > a {
   color: white;
 }
-
 
 .menuActive {
   display: none;
@@ -204,7 +211,6 @@ export default {
 .iconactive {
   transform: rotate(45deg);
 }
-
 
 .menu-img:hover {
   transform: rotate(45deg);
