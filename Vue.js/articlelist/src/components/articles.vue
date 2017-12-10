@@ -119,6 +119,7 @@ export default {
         console.log(err);
       })
   },
+  props: ['cat'],
   methods: {
     splitTags(tags) {
       return tags.split(', ');

@@ -2,7 +2,7 @@
   <div>
     <b-nav fill pills>
       <b-nav-item v-on:click="toggleSub" class="hover-element"><img v-bind:class="{iconactive: !isSubHidden }" :src="'static/Newspaper/img/grid-icon.png'"></b-nav-item>
-      <b-nav-item class="hover-element" v-for='category in categories' :key='category.id' id=""> {{category.name}}</b-nav-item>
+      <b-nav-item class="hover-element" v-for='category in categories' :key='category.id' id="" v-on:click="FilterCategory(category.name)"> {{category.name}}</b-nav-item>
     </b-nav>
 
     <b-container v-bind:class="{menuActive: isSubHidden }">
@@ -76,12 +76,13 @@ export default {
         category1: { id: 0, name: 'Business' },
         category2: { id: 1, name: 'Politics' },
         category3: { id: 2, name: 'Technology' }
-      }
+      },
     }
   },
   created() {
     csrftoken = cookies.get('csrftoken');
   },
+  props: ['cat'],
   methods: {
     toggleSub: function(event) {
       this.isSubHidden = !this.isSubHidden
@@ -148,6 +149,11 @@ export default {
         });
       this.clearName()
       this.$refs.modal.hide()
+    },
+    FilterCategory(category){
+      console.log("Trying to emit: " + category)
+      console.log(this.cat);
+      this.$emit('categoryChanged', category);
     }
 
   }
