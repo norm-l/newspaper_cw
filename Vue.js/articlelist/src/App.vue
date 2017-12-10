@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <menubar></menubar>
-    <articles></articles>
+    <menubar :cat="category" @categoryChanged="category = $event"></menubar>
+    <articles :cat="category"></articles>
   </div>
 </template>
 
@@ -18,11 +18,21 @@ import VueSession from 'vue-session'
 
 Vue.use(VueSession)
 Vue.use(BootstrapVue)
+
+
 export default {
   name: 'app',
   components: {
     menubar,
     articles
+  },
+  data: function(){
+    return{
+      category: "ALL"
+    }
+  },
+  methods:{
+    
   }
 }
 </script>
