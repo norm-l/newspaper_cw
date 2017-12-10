@@ -40,10 +40,8 @@
           <b-col>
             <b-btn v-b-modal.modalPrevent>Register</b-btn>
           </b-col>
-
         </b-row>
       </div>
-
     </b-container>
 
     <b-modal id="modalPrevent" ref="modal" title="Register" @ok="handleOk" @shown="clearName">
@@ -62,24 +60,25 @@
 <script>
 import axios from "axios";
 import cookies from "cookies-js";
-import Vue from "vue";
+
 var csrftoken = "not-loaded";
 
 export default {
   name: "menubar",
   data() {
     return {
+      showAlert: false,
       isSubHidden: true,
       loggedIn: false,
       user: { email: "", password: "", name: "", phone: "" },
       // Placeholder object with a few articles.
       categories: {
-        category0: {id: 0, name:"Home"},
-        category1: { id: 1, name: 'Business' },
-        category2: { id: 2, name: 'Politics' },
-        category3: { id: 3, name: 'Technology' }
-      },
-    }
+        category0: { id: 0, name: "Home" },
+        category1: { id: 1, name: "Business" },
+        category2: { id: 2, name: "Politics" },
+        category3: { id: 3, name: "Technology" }
+      }
+    };
   },
   created() {
     csrftoken = cookies.get("csrftoken");
@@ -122,6 +121,8 @@ export default {
               "Bearer " + response.data.token;
             // User is now logged in
             this.loggedIn = true;
+          } else if (response.status === 403) {
+            alert("Invalid username and/or password!");
           }
         })
         .catch(function(error) {
@@ -130,15 +131,15 @@ export default {
     },
     LogOut: function(event) {
       this.loggedIn = false;
-      this.clearName();
+      // this.clearName();
       this.$session.destroy();
     },
-    clearName() {
-      this.user.name = "";
-      this.user.password = "";
-      this.user.name = "";
-      this.user.phone = "";
-    },
+    // clearName() {
+    //   this.user.name = "";
+    //   this.user.password = "";
+    //   this.user.name = "";
+    //   this.user.phone = "";
+    // },
     handleOk(evt) {
       // Prevent modal from closing
       evt.preventDefault();
@@ -157,17 +158,17 @@ export default {
       };
       axios
         .post("/register", JSON.stringify(this.user), config)
-        .then(function(response) {
-          console.log(response);
+        .then(response => {
+          alert("Succesfully registered! Please login");
         })
         .catch(function(error) {
           console.log(error);
         });
-      this.clearName();
+      // this.clearName();
       this.$refs.modal.hide();
     },
-    FilterCategory(category){
-      this.$emit('categoryChanged', category);
+    FilterCategory(category) {
+      this.$emit("categoryChanged", category);
     }
   }
 };
