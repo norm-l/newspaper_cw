@@ -46,10 +46,7 @@
         <icon scale="5" name="warning" class="mt-5" />
         <p>
           <b>No Articles Found!</b>
-          <br />Have you added some in
-          <a href="http://127.0.0.1:8000/admin/Newspaper/article/">
-            <i>here</i>
-          </a>?</p>
+        </p>
       </div>
     </div>
     <div v-else>
@@ -76,7 +73,7 @@
                 <p v-text="singleArticle.content" />
               </div>
             </div>
-            <!-- Continue reading the full article -->
+            <!-- Back to articles the full article -->
             <button class="btn btn-success float-right mb-3" v-on:click="BackToList()">Back to articles</button>
             <ul class="list-unstyled mt-2">
               <!-- Article Tags -->
@@ -90,6 +87,7 @@
                 <span class="badge badge-success ml-1" v-text="singleArticle.likes" />
               </li>
             </ul>
+            <commentComponent></commentComponent>
 
           </div>
         </div>
@@ -101,8 +99,12 @@
 
 <script>
 import axios from 'axios';
+import commentComponent from './comments'
 export default {
   name: 'articles',
+  components: {
+    commentComponent
+  },
   data() {
     return {
       articles: [],
