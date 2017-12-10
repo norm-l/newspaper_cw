@@ -4,7 +4,6 @@
       <b-nav-item v-on:click="toggleSub" class="hover-element"><img v-bind:class="{iconactive: !isSubHidden }" :src="'static/Newspaper/img/grid-icon.png'"></b-nav-item>
       <b-nav-item class="hover-element" v-for='category in categories' :key='category.id' id="" v-on:click="FilterCategory(category.name)"> {{category.name}}</b-nav-item>
     </b-nav>
-
     <b-container v-bind:class="{menuActive: isSubHidden }">
       <div v-if="loggedIn">
         <b-row>
@@ -18,23 +17,22 @@
             Tel: {{user.tel}}
           </b-col>
           <b-col>
-            <b-button v-on:click="LogOut" type="button" variant="danger">LogOut</b-button>
+            <b-button v-on:click="LogOut" type="button" variant="danger">Log Out</b-button>
           </b-col>
         </b-row>
-
       </div>
       <div v-else>
         <b-row>
           <b-col>
-            <b-form v-on:submit.prevent="LogIn" inline>
-              <label class="sr-only" for="inlineFormInputGroupUsername2">Email</label>
+            <b-form @submit.prevent="LogIn" inline novalidate validated>
               <b-input-group left="@" class="mb-2 mr-sm-2 mb-sm-0">
-                <b-form-input v-model="user.email" id="inlineFormInputGroupUsername2" placeholder="Username" />
+                <label class="sr-only" for="email">Email</label>
+                <b-form-input v-model="user.email" class="form-control" type="email" placeholder="E-Mail" required />
               </b-input-group>
               <b-input-group left="Password" class="mb-2 mr-sm-2 mb-sm-0">
-                <b-form-input v-model="user.password" type="password"></b-form-input>
+                <b-form-input v-model="user.password" type="password" placeholder="Password" required />
               </b-input-group>
-              <b-button type="submit" variant="primary">LogIn</b-button>
+              <b-button type="submit" variant="primary">Log In</b-button>
             </b-form>
           </b-col>
           <b-col>
@@ -43,16 +41,14 @@
         </b-row>
       </div>
     </b-container>
-
     <b-modal id="modalPrevent" ref="modal" title="Register" @ok="handleOk" @shown="clearName">
-      <form @submit.stop.prevent="handleSubmit">
-        <b-form-input type="email" placeholder="Email" v-model="user.email"></b-form-input>
-        <b-form-input type="password" placeholder="Password" v-model="user.password"></b-form-input>
-        <b-form-input type="text" placeholder="Name" v-model="user.name"></b-form-input>
-        <b-form-input type="tel" placeholder="Phone" v-model="user.phone"></b-form-input>
-      </form>
+      <b-form @submit.stop.prevent="handleSubmit" novalidate validated>
+        <b-form-input type="email" class="form-control" placeholder="E-Mail" v-model="user.email" required />
+        <b-form-input type="password" placeholder="Password" v-model="user.password" required />
+        <b-form-input type="text" placeholder="Name" v-model="user.name" required />
+        <b-form-input type="tel" pattern="\d+" placeholder="Phone Number" v-model="user.phone" required />
+      </b-form>
     </b-modal>
-
   </div>
 </template>
 
@@ -121,25 +117,27 @@ export default {
               "Bearer " + response.data.token;
             // User is now logged in
             this.loggedIn = true;
-          } else if (response.status === 403) {
-            alert("Invalid username and/or password!");
           }
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(error => {
+          if (error.response.status === 403) {
+            alert("Invalid username and/or password!");
+          } else {
+            console.log(error);
+          }
         });
     },
     LogOut: function(event) {
       this.loggedIn = false;
-      // this.clearName();
       this.$session.destroy();
+      this.clearName();
     },
-    // clearName() {
-    //   this.user.name = "";
-    //   this.user.password = "";
-    //   this.user.name = "";
-    //   this.user.phone = "";
-    // },
+    clearName() {
+      this.user.name = "";
+      this.user.password = "";
+      this.user.name = "";
+      this.user.phone = "";
+    },
     handleOk(evt) {
       // Prevent modal from closing
       evt.preventDefault();
@@ -161,10 +159,10 @@ export default {
         .then(response => {
           alert("Succesfully registered! Please login");
         })
-        .catch(function(error) {
+        .catch(error => {
           console.log(error);
         });
-      // this.clearName();
+      this.clearName();
       this.$refs.modal.hide();
     },
     FilterCategory(category) {
