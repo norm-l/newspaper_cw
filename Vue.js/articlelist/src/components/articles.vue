@@ -88,20 +88,18 @@
               </li>
             </ul>
             <commentComponent></commentComponent>
-
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import commentComponent from './comments'
+import axios from "axios";
+import commentComponent from "./comments";
 export default {
-  name: 'articles',
+  name: "articles",
   components: {
     commentComponent
   },
@@ -113,58 +111,91 @@ export default {
       category: "Home"
     }
     // For local use:
-    // return {articles:[{title: 'title1', author: 'author1', pub_date: 'February 2, 2017', content: 'Small text example', category: 'business', likes: 10, article_img: './src/assets/default.png', tags: 'test, wow, nice'}]}
+    // return {
+    //   articles: [
+    //     {
+    //       title: "title1",
+    //       author: "author1",
+    //       pub_date: "February 2, 2017",
+    //       content: "Small text example",
+    //       category: "business",
+    //       likes: 10,
+    //       article_img: "./src/assets/default.png",
+    //       tags: "test, wow, nice"
+    //     }
+    //   ],
+    //   singleArticle: {},
+    //   readingList: true,
+    //   category: "Home"
+    // };
   },
   mounted: function() {
-    axios.get("/api/latestarticles")
-      .then(response => { this.articles = response.data; this.readingList = true; })
-      .catch((err) => {
-        console.log(err);
+    axios
+      .get("/api/latestarticles")
+      .then(response => {
+        this.articles = response.data;
+        this.readingList = true;
       })
+      .catch(err => {
+        console.log(err);
+      });
   },
-  props: ['cat'],
+  props: ["cat"],
   watch: {
-    '$props': {
+    $props: {
       handler: function(val) {
-        this.category = val.cat
-        this.GetLatestArticles(this.category)
+        this.category = val.cat;
+        this.GetLatestArticles(this.category);
       },
       deep: true
     }
   },
   methods: {
     splitTags(tags) {
-      return tags.split(', ');
+      return tags.split(", ");
     },
     ReadArticle(id) {
-      axios.get("/api/article/" + id)
-        .then(response => { this.singleArticle = response.data; this.readingList = false; })
-        .catch((err) => {
-          console.log(err);
+      axios
+        .get("/api/article/" + id)
+        .then(response => {
+          this.singleArticle = response.data;
+          this.readingList = false;
         })
+        .catch(err => {
+          console.log(err);
+        });
     },
     BackToList() {
-      this.GetLatestArticles(this.category)
-
+      this.GetLatestArticles(this.category);
     },
     GetLatestArticles(category) {
       if (category == "Home") {
-        axios.get("/api/latestarticles")
-          .then(response => { this.articles = response.data; this.singleArticle = {}; this.readingList = true; })
-          .catch((err) => {
-            console.log(err);
+        axios
+          .get("/api/latestarticles")
+          .then(response => {
+            this.articles = response.data;
+            this.singleArticle = {};
+            this.readingList = true;
           })
+          .catch(err => {
+            console.log(err);
+          });
       } else {
-        var conf = {params: {'category': category}}
-        axios.get("/api/latestarticles", conf)
-          .then(response => { this.articles = response.data; this.singleArticle = {}; this.readingList = true; })
-          .catch((err) => {
-            console.log(err);
+        var conf = { params: { category: category } };
+        axios
+          .get("/api/latestarticles", conf)
+          .then(response => {
+            this.articles = response.data;
+            this.singleArticle = {};
+            this.readingList = true;
           })
+          .catch(err => {
+            console.log(err);
+          });
       }
-    },
+    }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -178,8 +209,6 @@ export default {
 .text-l {
   text-align: left;
 }
-
-
 
 /* In order to center all articles */
 
