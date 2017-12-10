@@ -1,5 +1,11 @@
 <template>
-  <div class="articles">
+  <div>
+  <div>
+    <b-form @submit="addComment" @reset="resetComment">
+        <b-form-textarea placeholder="Enter your comment" v-model="comment" :rows="3" :max-rows="10"></b-form-textarea>
+        <b-button type="submit" variant="primary">Add Comment</b-button>
+    </b-form>
+</div>
       <!-- Check if there are any articles in the object. -->
       <div v-if="Object.keys(comments).length !== 0" class="center-block">
         <!-- Loop through the object finding all articles, attaching the classes to them -->
@@ -31,6 +37,7 @@ export default {
   data() {
     return {
       articleId: null,
+      comment: "",
       comments: [{user : {name: "Andrew"}, content : "Im a troll" }],
       
     }
@@ -48,6 +55,15 @@ export default {
     }
   },
   methods: {
+      addComment(event){
+        event.preventDefault();
+        console.log(this.comment);
+
+      },
+      resetComment(event){
+        evt.preventDefault();
+        this.comment = "";
+      }
 
   }
 }
