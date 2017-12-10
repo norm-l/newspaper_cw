@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from Newspaper.serializers import ArticleSerializer, ArticleHeadlineSerializer ,RegisterSerializer, CommentSerializer
+from Newspaper.serializers import ArticleSerializer, ArticleHeadlineSerializer, RegisterSerializer, CommentSerializer, LikesSerializer
 from Newspaper.data import *
+from rest_framework_jwt.settings import api_settings
 # UNUSED:
 # from django.http import HttpResponse
 # from rest_framework import status
@@ -83,17 +84,26 @@ def authentication(request):
     if request.method == 'POST':
         email = request.data['email']
         password = request.data['password']
-
-        print("logging in with:", email, "|", password)
         user = authenticate(email=email, password=password)
 
+        payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+        encode_handler = api_settings.JWT_ENCODE_HANDLER
+
         if user:
-            print("Authenticated!")
-            login(request, user)
-        #     return redirect('/')
-        # else:
-        #     return render(request, 'index.html', {'errors': 'user is not defined'})
-    return Response(status=403)
+            if user.is_active:
+                print("Authenticated user: ", user)
+                login(request, user)
+                payload = payload_handler(user)
+                token = encode_handler(payload)
+                return Response({'token': token})
+            else:
+                return Response("Account is disabled!")
+        else:
+            print("Invalid login for user: ", user)
+            return redirect("/")
+    else:
+        print("Attempted authentication with the wrong request method (not POST).")
+        return redirect("/")
 
 
 @api_view(['POST'])
@@ -116,6 +126,7 @@ def comment(request):
     else:
         return Response(status=500)
     return Response(status=200)
+
 
 @api_view(['POST'])
 def like(request):
