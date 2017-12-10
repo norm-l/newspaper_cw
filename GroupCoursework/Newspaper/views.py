@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from Newspaper.serializers import ArticleSerializer, RegisterSerializer, CommentSerializer
+from Newspaper.serializers import ArticleSerializer, ArticleHeadlineSerializer ,RegisterSerializer, CommentSerializer
 from Newspaper.data import *
 # UNUSED:
 # from django.http import HttpResponse
@@ -58,9 +58,9 @@ def get_latest_articles(request):
         else:
             # Return the latest Articles
             articles = GetLatestArticles()
-            serializer = ArticleSerializer(articles, many=True)
+            serializer = ArticleHeadlineSerializer(articles, many=True)
 
-        serializer = ArticleSerializer(articles, many=True)
+        serializer = ArticleHeadlineSerializer(articles, many=True)
         return Response(serializer.data)
 
 
@@ -111,6 +111,16 @@ def register(request):
 def comment(request):
     data = request.data
     serializer = CommentSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        return Response(status=500)
+    return Response(status=200)
+
+@api_view(['POST'])
+def like(request):
+    data = request.data
+    serializer = LikesSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
     else:
