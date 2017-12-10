@@ -74,11 +74,12 @@ export default {
       user: { email: "", password: "", name: "", phone: "" },
       // Placeholder object with a few articles.
       categories: {
-        category1: { id: 0, name: "Business" },
-        category2: { id: 1, name: "Politics" },
-        category3: { id: 2, name: "Technology" }
-      }
-    };
+        category0: {id: 0, name:"Home"},
+        category1: { id: 1, name: 'Business' },
+        category2: { id: 2, name: 'Politics' },
+        category3: { id: 3, name: 'Technology' }
+      },
+    }
   },
   created() {
     csrftoken = cookies.get("csrftoken");
@@ -158,9 +159,8 @@ export default {
       this.clearName();
       this.$refs.modal.hide();
     },
-    FilterCategory(category) {
-      console.log("Emmiting");
-      this.$emit("categoryChanged", category);
+    FilterCategory(category){
+      this.$emit('categoryChanged', category);
     }
   }
 };

@@ -108,7 +108,7 @@ export default {
       articles: [],
       singleArticle: {},
       readingList: true,
-      category: "ALL"
+      category: "Home"
     }
     // For local use:
     // return {articles:[{title: 'title1', author: 'author1', pub_date: 'February 2, 2017', content: 'Small text example', category: 'business', likes: 10, article_img: './src/assets/default.png', tags: 'test, wow, nice'}]}
@@ -125,13 +125,7 @@ export default {
     '$props': {
       handler: function(val) {
         this.category = val.cat
-        var params = new URLSearchParams()
-        params.append('category', this.category)
-        axios.get("/api/latestarticles")
-          .then(response => { this.articles = response.data; this.readingList = true; })
-          .catch((err) => {
-            console.log(err);
-          })
+        this.GetLatestArticles(this.category)
       },
       deep: true
     }
@@ -148,25 +142,20 @@ export default {
         })
     },
     BackToList() {
-      axios.get("/api/latestarticles")
-        .then(response => { this.articles = response.data; this.singleArticle = {}; this.readingList = true; })
-        .catch((err) => {
-          console.log(err);
-        })
+      this.GetLatestArticles(this.category)
 
     },
     GetLatestArticles(category) {
-      if (category == "all") {
+      if (category == "Home") {
         axios.get("/api/latestarticles")
-          .then(response => { this.articles = response.data; this.readingList = true; })
+          .then(response => { this.articles = response.data; this.singleArticle = {}; this.readingList = true; })
           .catch((err) => {
             console.log(err);
           })
       } else {
-        var params = new URLSearchParams();
-        params.append('category', this.category)
-        axios.get("/api/latestarticles")
-          .then(response => { this.articles = response.data; this.readingList = true; })
+        var conf = {params: {'category': category}}
+        axios.get("/api/latestarticles", conf)
+          .then(response => { this.articles = response.data; this.singleArticle = {}; this.readingList = true; })
           .catch((err) => {
             console.log(err);
           })

@@ -28,7 +28,7 @@ export default {
   },
   data: function(){
     return{
-      category: "ALL"
+      category: "Home"
     }
   },
   methods:{
