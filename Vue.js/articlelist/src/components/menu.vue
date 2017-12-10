@@ -88,7 +88,6 @@ export default {
     },
     LogIn: function(event) {
       event.preventDefault();
-      console.log("form: ", JSON.stringify(this.user));
 
       var config = {headers :
         {'content-type': 'application/json',
@@ -100,12 +99,12 @@ export default {
       axios.post('/login', JSON.stringify(this.user), config)
         .then(function(response) {
           
-          console.log("response.body:", response.body)
+          console.log("response.data.token: ", response.data.token)
 
-          if(response.status === 200 && 'token' in response.body) {
+          if(response.status === 200 && 'token' in response.data) {
             this.$session.start()
-            this.$session.set('jwt', response.body.token)
-            Vue.http.headers.common['Autherization'] = 'Bearer ' + response.body.token
+            this.$session.set('jwt', response.data.token)
+            Vue.http.headers.common['Autherization'] = 'Bearer ' + response.data.token
 
             console.log("Logged in!: ", response);
             this.loggedIn = true
@@ -135,7 +134,6 @@ export default {
       }
     },
     handleSubmit() {
-      console.log(JSON.stringify(this.user))
       var config = {headers :
         {'content-type': 'application/json',
          'X-CSRFToken': csrftoken}};
