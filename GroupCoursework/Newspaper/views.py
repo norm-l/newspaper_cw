@@ -84,23 +84,31 @@ def authentication(request):
     if request.method == 'POST':
         email = request.data['email']
         password = request.data['password']
+        # Authenticate the user
         user = authenticate(email=email, password=password)
 
+        # Assign JWT handlers for generating a token
         payload_handler = api_settings.JWT_PAYLOAD_HANDLER
         encode_handler = api_settings.JWT_ENCODE_HANDLER
 
+        # If user is not None
         if user:
+            # And user is currently active
             if user.is_active:
                 print("Authenticated user: ", user)
-                login(request, user)
+                # Generate a token
                 payload = payload_handler(user)
                 token = encode_handler(payload)
+                # Return the token to the front-end
                 return Response({'token': token})
+            # User is not active
             else:
                 return Response("Account is disabled!")
+        # Wrong details
         else:
             print("Invalid login for user: ", user)
             return redirect("/")
+    # Login was attempted but not with POST
     else:
         print("Attempted authentication with the wrong request method (not POST).")
         return redirect("/")

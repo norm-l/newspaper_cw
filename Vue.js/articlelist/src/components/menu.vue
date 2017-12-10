@@ -84,6 +84,7 @@ export default {
   created() {
     csrftoken = cookies.get("csrftoken");
     if (this.$session.exists()) {
+      // The session exists (user is not logged out) so we get the user details
       this.user = this.$session.get("user");
       this.loggedIn = true;
     }
@@ -108,12 +109,18 @@ export default {
       axios
         .post("/login", JSON.stringify(this.user), config)
         .then(response => {
+          // If the response was successful and contains a token
           if (response.status === 200 && "token" in response.data) {
+            // Start a session
             this.$session.start();
+            // Assign the jwt token from back-end to the session
             this.$session.set("jwt", response.data.token);
+            // Save user details to the session
             this.$session.set("user", this.user);
+            // Set the authorization header to the back-end token
             axios.defaults.headers.common["Authorization"] =
               "Bearer " + response.data.token;
+            // User is now logged in
             this.loggedIn = true;
           }
         })
