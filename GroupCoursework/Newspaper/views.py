@@ -81,13 +81,13 @@ def get_article(request, pk):
 @api_view(['POST'])
 def authentication(request):
     if request.method == 'POST':
-        email = request.user.email
-        password = request.user.password
+        email = request.data['email']
+        password = request.data['password']
 
         print("logging in with:", email, "|", password)
         user = authenticate(email=email, password=password)
 
-        if user is not None:
+        if user:
             print("Authenticated!")
             login(request, user)
         #     return redirect('/')
