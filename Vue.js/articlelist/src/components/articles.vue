@@ -125,13 +125,7 @@ export default {
     '$props': {
       handler: function(val) {
         this.category = val.cat
-        var params = new URLSearchParams()
-        params.append('category', this.category)
-        axios.get("/api/latestarticles")
-          .then(response => { this.articles = response.data; this.readingList = true; })
-          .catch((err) => {
-            console.log(err);
-          })
+        this.GetLatestArticles(this.category)
       },
       deep: true
     }
@@ -156,16 +150,15 @@ export default {
 
     },
     GetLatestArticles(category) {
-      if (category == "all") {
+      if (category == "Home") {
         axios.get("/api/latestarticles")
           .then(response => { this.articles = response.data; this.readingList = true; })
           .catch((err) => {
             console.log(err);
           })
       } else {
-        var params = new URLSearchParams();
-        params.append('category', this.category)
-        axios.get("/api/latestarticles")
+        var conf = {params: {'category': this.category}}
+        axios.get("/api/latestarticles", conf)
           .then(response => { this.articles = response.data; this.readingList = true; })
           .catch((err) => {
             console.log(err);
