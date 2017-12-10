@@ -107,7 +107,7 @@ def authentication(request):
         # Wrong details
         else:
             print("Invalid login for user: ", user)
-            return redirect("/")
+            return Response(status=403)
     # Login was attempted but not with POST
     else:
         print("Attempted authentication with the wrong request method (not POST).")
