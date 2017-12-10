@@ -4,26 +4,8 @@
    <head>
       <meta charset=utf-8>
       <meta name=viewport content="width=device-width,initial-scale=1">
-      <title>articlelist</title>
+      <title>Newspaper Website</title>
       <link href="{% static 'Newspaper/css/app.css' %}" rel=stylesheet>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <script>
-      function trg(article){
-         $.ajax({
-          type: "POST",
-          url: "{% url 'article' %}",
-          data: {
-            title:article.title,
-            image:article.image,
-            content:article.content,
-
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-          },
-       success: function(response){
-                     $('#app').html(response)
-                    }});
-      }
-      </script>
    </head>
    <body>
       <div id="app"></div>
