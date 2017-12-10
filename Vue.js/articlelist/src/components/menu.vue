@@ -151,8 +151,7 @@ export default {
       this.$refs.modal.hide()
     },
     FilterCategory(category){
-      console.log("Trying to emit: " + category)
-      console.log(this.cat);
+      console.log("Emmiting");
       this.$emit('categoryChanged', category);
     }
 
