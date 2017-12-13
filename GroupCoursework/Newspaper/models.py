@@ -111,18 +111,22 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
-class Comments (models.Model):
+class Comment (models.Model):
     #FK User
-    user = models.ForeignKey('User')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     #FK Article
     article = models.ForeignKey('Article')
     #User comment
-    commentContent = models.TextField()
+    content = models.TextField()
+
+    def __str__(self):
+        return self.content
     
-class Likes(models.Model):
-    #FK User
-    user = models.ForeignKey('User')
-    #FK Article
-    article = models.ForeignKey('Article')
-    #User Like
-    LikeContent = models.BooleanField()
+class Like(models.Model):
+    profile = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    liked_date = models.DateField(auto_now_add=True)
+    liked = models.BooleanField()
+
+    def __str__(self):
+        return self.liked

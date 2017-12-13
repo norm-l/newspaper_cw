@@ -7,6 +7,7 @@ from Newspaper.data import *
 from rest_framework_jwt.settings import api_settings
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
+from Newspaper.models import User, Like, Comment
 # UNUSED:
 # from django.http import HttpResponse
 # from rest_framework import status
@@ -138,3 +139,20 @@ def like(request):
     else:
         return Response(status=500)
     return Response(status=200)
+
+@api_view(['POST'])
+def like(request, id):
+    likes = Like.objects.filter(article__id=id, profile=request.user, )
+    if len(likes) > 0:
+        for l in likes:
+            if l.liked:
+                l.delete()
+        return JsonResponse({'msg': "Completed Successfully", 'type': 'Info'})
+
+    else:
+        if request.method == "POST":
+            comment = Like.objects.create(profile=request.user, article=get_object_or_404(Article, id=id), liked=True)
+            return JsonResponse({'msg': "Liked", 'type': 'Info', 'data': comment.id})
+        else:
+            return JsonResponse({'msg': "Like", 'type': 'Warning'})
+

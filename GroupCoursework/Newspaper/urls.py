@@ -12,4 +12,6 @@ urlpatterns = [
     url(r'^register$', views.register, name='register'),
     url(r'^comment$', views.comment, name='comment'),
     url(r'^login$', authviews.obtain_auth_token),
+
+    url(r'^like/(?P<id>[\d]+)/$', views.like, name='like'),
 ]
