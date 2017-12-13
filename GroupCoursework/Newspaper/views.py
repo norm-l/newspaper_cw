@@ -16,13 +16,7 @@ from rest_framework_jwt.settings import api_settings
 def index(request):
     return render(request, 'Newspaper/index.html')
 
-
-def article(request):
-    return render(request, 'Newspaper/single.html', {'data': request.POST})
-
 # Web API
-
-
 @api_view(['GET'])
 def get_articles(request):
     """
@@ -87,20 +81,13 @@ def authentication(request):
         # Authenticate the user
         user = authenticate(email=email, password=password)
 
-        # Assign JWT handlers for generating a token
-        payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-        encode_handler = api_settings.JWT_ENCODE_HANDLER
-
         # If user is not None
         if user:
             # And user is currently active
             if user.is_active:
                 print("Authenticated user: ", user)
-                # Generate a token
-                payload = payload_handler(user)
-                token = encode_handler(payload)
-                # Return the token to the front-end
-                return Response({'token': token})
+                login(request, user)
+                # Return 
             # User is not active
             else:
                 return Response("Account is disabled!")

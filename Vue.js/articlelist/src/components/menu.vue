@@ -17,7 +17,7 @@
             Tel: {{user.tel}}
           </b-col>
           <b-col>
-            <b-button v-on:click="LogOut" type="button" variant="danger">Log Out</b-button>
+            <b-button v-on:click="LogOut" type="button" variant="danger">Logout</b-button>
           </b-col>
         </b-row>
       </div>
@@ -25,14 +25,14 @@
         <b-row>
           <b-col>
             <b-form @submit.prevent="LogIn" inline novalidate validated>
-              <b-input-group left="@" class="mb-2 mr-sm-2 mb-sm-0">
-                <label class="sr-only" for="email">Email</label>
+              <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
+                <label class="sr-only" for="email" />
                 <b-form-input v-model="user.email" class="form-control" type="email" placeholder="E-Mail" required />
               </b-input-group>
-              <b-input-group left="Password" class="mb-2 mr-sm-2 mb-sm-0">
+              <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
                 <b-form-input v-model="user.password" type="password" placeholder="Password" required />
               </b-input-group>
-              <b-button type="submit" variant="primary">Log In</b-button>
+              <b-button type="submit" variant="primary">Login</b-button>
             </b-form>
           </b-col>
           <b-col>
@@ -109,12 +109,12 @@ export default {
             // Start a session
             this.$session.start();
             // Assign the jwt token from back-end to the session
-            this.$session.set("jwt", response.data.token);
+            this.$session.set("token: ", response.data.token);
             // Save user details to the session
             this.$session.set("user", this.user);
             // Set the authorization header to the back-end token
             axios.defaults.headers.common["Authorization"] =
-              "Bearer " + response.data.token;
+              "Token " + response.data.token;
             // User is now logged in
             this.loggedIn = true;
           }
