@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from Newspaper.serializers import ArticleSerializer, ArticleHeadlineSerializer, RegisterSerializer, CommentSerializer, LikesSerializer
 from Newspaper.data import *
 from rest_framework_jwt.settings import api_settings
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import api_view, permission_classes
 # UNUSED:
 # from django.http import HttpResponse
 # from rest_framework import status
@@ -18,6 +20,7 @@ def index(request):
 
 # Web API
 @api_view(['GET'])
+@permission_classes((AllowAny, ))
 def get_articles(request):
     """
     Gets all articles
@@ -39,6 +42,7 @@ def get_articles(request):
 
 
 @api_view(['GET'])
+@permission_classes((AllowAny, ))
 def get_latest_articles(request):
     """
     Get the latest articles, limited to 10
@@ -60,6 +64,7 @@ def get_latest_articles(request):
 
 
 @api_view(['GET'])
+@permission_classes((AllowAny, ))
 def get_article(request, pk):
     """
     Get one article by referencing the primary key
@@ -102,6 +107,7 @@ def authentication(request):
 
 
 @api_view(['POST'])
+@permission_classes((AllowAny, ))
 def register(request):
     data = request.data
     serializer = RegisterSerializer(data=data)
