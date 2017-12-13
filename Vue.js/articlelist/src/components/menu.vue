@@ -8,7 +8,7 @@
       <div v-if="loggedIn">
         <b-row>
           <b-col>
-            Email: {{user.email}}
+            Email: {{user.username}}
           </b-col>
           <b-col>
             Name: {{user.name}}
@@ -27,7 +27,7 @@
             <b-form @submit.prevent="LogIn" inline novalidate validated>
               <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
                 <label class="sr-only" for="email" />
-                <b-form-input v-model="user.email" class="form-control" type="email" placeholder="E-Mail" required />
+                <b-form-input v-model="user.username" class="form-control" type="email" placeholder="E-Mail" required />
               </b-input-group>
               <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
                 <b-form-input v-model="user.password" type="password" placeholder="Password" required />
@@ -43,7 +43,7 @@
     </b-container>
     <b-modal id="modalPrevent" ref="modal" title="Register" @ok="handleOk" @shown="clearName">
       <b-form @submit.stop.prevent="handleSubmit" novalidate validated>
-        <b-form-input type="email" class="form-control" placeholder="E-Mail" v-model="user.email" required />
+        <b-form-input type="email" class="form-control" placeholder="E-Mail" v-model="user.username" required />
         <b-form-input type="password" placeholder="Password" v-model="user.password" required />
         <b-form-input type="text" placeholder="Name" v-model="user.name" required />
         <b-form-input type="tel" pattern="\d+" placeholder="Phone Number" v-model="user.phone" required />
@@ -66,7 +66,7 @@ export default {
       showAlert: false,
       isSubHidden: true,
       loggedIn: false,
-      user: { email: "", password: "", name: "", phone: "" },
+      user: { username: "", password: "", name: "", phone: "" },
       // Placeholder object with a few articles.
       categories: {
         category0: { id: 0, name: "Home" },
@@ -97,7 +97,7 @@ export default {
           "X-CSRFToken": csrftoken
         },
         auth: {
-          username: this.user.email,
+          username: this.user.username,
           password: this.user.password
         }
       };
@@ -133,7 +133,7 @@ export default {
       this.clearName();
     },
     clearName() {
-      this.user.name = "";
+      this.user.username = "";
       this.user.password = "";
       this.user.name = "";
       this.user.phone = "";
@@ -141,7 +141,7 @@ export default {
     handleOk(evt) {
       // Prevent modal from closing
       evt.preventDefault();
-      if (!this.user.email) {
+      if (!this.user.username) {
         alert("Please enter your email");
       } else {
         this.handleSubmit();
