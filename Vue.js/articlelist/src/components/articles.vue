@@ -38,6 +38,9 @@
               <icon name="thumbs-up" />
               <span class="badge badge-success ml-1" v-text="article.likes" />
             </li>
+            <li>
+              <button v-on:click="LikeArticle(article.id)" class="btn btn-outline-info btn-sm mt-2"><icon name="thumbs-up" /> Like</button>
+            </li>
           </ul>
         </div>
       </div>
@@ -114,6 +117,7 @@ export default {
     // return {
     //   articles: [
     //     {
+    //       id: "1",
     //       title: "title1",
     //       author: "author1",
     //       pub_date: "February 2, 2017",
@@ -153,6 +157,9 @@ export default {
   methods: {
     splitTags(tags) {
       return tags.split(", ");
+    },
+    LikeArticle(id) {
+      console.log(id);
     },
     ReadArticle(id) {
       axios
