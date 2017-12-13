@@ -80,6 +80,7 @@ export default {
     csrftoken = cookies.get("csrftoken");
     if (this.$session.exists()) {
       // The session exists (user is not logged out) so we get the user details
+      console.log("session: ", this.$session.getAll())
       this.user = this.$session.get("user");
       this.loggedIn = true;
     }
