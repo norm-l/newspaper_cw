@@ -81,6 +81,7 @@ export default {
     if (this.$session.exists()) {
       // The session exists (user is not logged out) so we get the user details
       this.user = this.$session.get("user");
+      console.log(this.$session.getAll());
       axios.defaults.headers.common["Authorization"] =
               "Token " + this.$session.get("token: ");
       this.loggedIn = true;

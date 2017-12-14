@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -20,6 +20,7 @@ def index(request):
     return render(request, 'Newspaper/index.html')
 
 # Web API
+
 @api_view(['GET'])
 @permission_classes((AllowAny, ))
 def get_articles(request):
@@ -27,7 +28,6 @@ def get_articles(request):
     Gets all articles
     """
     if request.method == 'GET':
-
         query = ExtractCategory(request.query_params)
         articles = None
         if query != None:
@@ -49,7 +49,6 @@ def get_latest_articles(request):
     Get the latest articles, limited to 10
     """
     if request.method == 'GET':
-
         query = ExtractCategory(request.query_params)
         articles = None
         if query != None:
@@ -93,7 +92,7 @@ def authentication(request):
             if user.is_active:
                 print("Authenticated user: ", user)
                 login(request, user)
-                # Return 
+                # Return
             # User is not active
             else:
                 return Response("Account is disabled!")
@@ -129,30 +128,30 @@ def comment(request):
         return Response(status=500)
     return Response(status=200)
 
-
-@api_view(['POST'])
-def like(request):
-    data = request.data
-    serializer = LikesSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
+@api_view(['GET'])
+def get_likes(request, id):
+    if request.method == "GET":
+        try:
+            likes = Like.objects.filter(article__id=id, liked=True)
+            return Response(likes.count())
+        except Like.DoesNotExist:
+            return Response(0)
     else:
-        return Response(status=500)
-    return Response(status=200)
+        print("Attempted authentication with the wrong request method (not GET).")
+        return redirect("/")
 
 @api_view(['POST'])
 def like(request, id):
-    likes = Like.objects.filter(article__id=id, profile=request.user, )
-    if len(likes) > 0:
-        for l in likes:
-            if l.liked:
-                l.delete()
-        return JsonResponse({'msg': "Completed Successfully", 'type': 'Info'})
-
+    if request.method == "POST":
+        try:
+            like = Like.objects.get(article__id=id, profile=request.user)
+            if like.liked:
+                like.delete()
+                return Response("Unliked!")
+        except Like.DoesNotExist:
+            Like.objects.create(profile=request.user, article=get_object_or_404(
+                Article, id=id), liked=True)
+            return Response("Liked!")
     else:
-        if request.method == "POST":
-            comment = Like.objects.create(profile=request.user, article=get_object_or_404(Article, id=id), liked=True)
-            return JsonResponse({'msg': "Liked", 'type': 'Info', 'data': comment.id})
-        else:
-            return JsonResponse({'msg': "Like", 'type': 'Warning'})
-
+        print("Attempted authentication with the wrong request method (not POST).")
+        return redirect("/")

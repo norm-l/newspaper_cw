@@ -35,11 +35,8 @@
             </li>
             <!-- Article Likes -->
             <li>
-              <icon name="thumbs-up" />
+              <span class="like_button" v-on:click="LikeArticle(article.id)"><icon name="thumbs-up" /></span>
               <span class="badge badge-success ml-1" v-text="article.likes" />
-            </li>
-            <li>
-              <button v-on:click="LikeArticle(article.id)" class="btn btn-outline-info btn-sm mt-2"><icon name="thumbs-up" /> Like</button>
             </li>
           </ul>
         </div>
@@ -159,7 +156,11 @@ export default {
       return tags.split(", ");
     },
     LikeArticle(id) {
-      console.log(id);
+      axios
+        .post("/like/" + id)
+        .catch(err => {
+          console.log(err);
+        });
     },
     ReadArticle(id) {
       axios
@@ -207,7 +208,12 @@ export default {
 
 <style scoped>
 /* To display borders between articles and align all article text left */
-
+.like_button {
+  cursor: pointer;
+}
+.like_button:active {
+  color: #428bca;
+}
 .article-border {
   border-bottom: 1px solid #ddd;
   text-align: left;
