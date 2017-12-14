@@ -14,6 +14,8 @@
         <div v-for="comment in comments" :key='comment.id'>
               <b-list-group-item>
                  {{comment.user.name}} - {{comment.content}}
+
+                  <b-button v-on:click="DeleteComment(comment.id)" variant="danger">Delete</b-button>
             </b-list-group-item>
         </div>
         </b-list-group>
@@ -38,31 +40,59 @@ export default {
     return {
       articleId: null,
       comment: "",
-      comments: [{user : {name: "Andrew"}, content : "Im a troll" }],
+      comments: [],
       
     }
   },
   mounted: function() {
-
+    console.log("component");
+    this.articleId = this.da;
+    this.DisplayComments(this.da);
+    console.log(this.da);
   },
-  props: ['displayArticle'],
-  watch: {
-    '$props': {
-      handler: function(val) {
-        this.articleId = val.id
-      },
-      deep: true
-    }
-  },
+  props: ["da"],
   methods: {
       addComment(event){
         event.preventDefault();
         console.log(this.comment);
+        var c = {};
+        c.content = this.comment;
+
+        axios
+        .post("/comment/" + this.articleId, JSON.stringify(c))
+        .then(response => {
+          this.DisplayComments(this.da);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+
 
       },
       resetComment(event){
         evt.preventDefault();
         this.comment = "";
+      },
+      DisplayComments(id){
+        axios
+        .get("/api/comments/" + id)
+        .then(response => {
+          this.comments = response.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      },
+      DeleteComment(id){
+        axios
+        .delete("/comment/" + this.articleId)
+        .then(response => {
+          this.DisplayComments(this.da);
+        })
+        .catch(error => {
+          console.log(error);
+        });        
       }
 
   }

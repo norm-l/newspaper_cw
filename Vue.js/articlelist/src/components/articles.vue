@@ -87,7 +87,7 @@
                 <span class="badge badge-success ml-1" v-text="singleArticle.likes" />
               </li>
             </ul>
-            <commentComponent></commentComponent>
+            <commentComponent :da="sArticleId"></commentComponent>
           </div>
         </div>
       </div>
@@ -104,31 +104,43 @@ export default {
     commentComponent
   },
   data() {
-    return {
-      articles: [],
-      singleArticle: {},
-      readingList: true,
-      category: "Home"
-    }
-    // For local use:
     // return {
-    //   articles: [
-    //     {
-    //       id: "1",
-    //       title: "title1",
-    //       author: "author1",
-    //       pub_date: "February 2, 2017",
-    //       content: "Small text example",
-    //       category: "business",
-    //       likes: 10,
-    //       article_img: "./src/assets/default.png",
-    //       tags: "test, wow, nice"
-    //     }
-    //   ],
+    //   articles: [],
     //   singleArticle: {},
+    //   sArticleId: 1,
     //   readingList: true,
     //   category: "Home"
-    // };
+    // }
+    // For local use:
+    return {
+      articles: [
+        {
+          id: "1",
+          title: "title1",
+          author: "author1",
+          pub_date: "February 2, 2017",
+          content: "Small text example",
+          category: "business",
+          likes: 10,
+          article_img: "./src/assets/default.png",
+          tags: "test, wow, nice"
+        }
+      ],
+      singleArticle:         {
+          id: "2",
+          title: "title1",
+          author: "author1",
+          pub_date: "February 2, 2017",
+          content: "Small text example",
+          category: "business",
+          likes: 10,
+          article_img: "./src/assets/default.png",
+          tags: "test, wow, nice"
+        },
+      readingList: false,
+      category: "Home",
+      sArticleId: 1,
+    };
   },
   mounted: function() {
     axios
@@ -167,6 +179,9 @@ export default {
         .get("/api/article/" + id)
         .then(response => {
           this.singleArticle = response.data;
+          console.log(this.singleArticle.id);
+          this.sArticleId = this.singleArticle.id;
+          console.log(this.sArticleId);
           this.readingList = false;
         })
         .catch(err => {

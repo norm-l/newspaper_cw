@@ -28,10 +28,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+class UserCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('name',)
+
 class CommentSerializer(serializers.ModelSerializer):
+    user = UserCommentSerializer(many=False, read_only=True)
+    
     class Meta:
         model = Comment
-        fields = "__all__"
+        fields = ('id', 'content' , 'user' , 'article')
+
+class CommentAddSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id', 'content' , 'article')
         
 class LikesSerializer(serializers.ModelSerializer):
     class Meta:

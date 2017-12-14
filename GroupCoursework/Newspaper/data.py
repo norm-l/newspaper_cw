@@ -1,8 +1,8 @@
 # Classes methods that allow us to access the data models
 
-from .models import Article
+from .models import Article, Comment
 
-# Gets the latest 10 articles from the model
+# Gets the latest 10 articlses from the model
 def GetLatestArticles():
     articles = Article.objects.all().order_by('-pub_date')[:10]
     return articles
@@ -31,4 +31,8 @@ def GetLatestArticlesByCategory(category_filter):
 def ExtractCategory(params):
     query = params.get('category')
     return query
+
+def GetCommentsForArticle(id):
+   comments = Comment.objects.all().filter(article__id=id)
+   return comments 
 

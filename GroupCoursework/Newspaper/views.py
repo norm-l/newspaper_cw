@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from Newspaper.serializers import ArticleSerializer, ArticleHeadlineSerializer, RegisterSerializer, CommentSerializer, LikesSerializer
+from Newspaper.serializers import ArticleSerializer, ArticleHeadlineSerializer, RegisterSerializer, CommentSerializer , CommentAddSerializer, LikesSerializer
 from Newspaper.data import *
 from rest_framework_jwt.settings import api_settings
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -118,16 +118,13 @@ def register(request):
     return Response(status=200)
 
 
-@api_view(['POST'])
-def comment(request):
-    data = request.data
-    serializer = CommentSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-    else:
+@api_view(['GET'])
+@permission_classes((AllowAny, ))
+def get_comments_for_article(request, id):
+    if not id:
         return Response(status=500)
-    return Response(status=200)
 
+<<<<<<< Updated upstream
 @api_view(['GET'])
 def get_likes(request, id):
     if request.method == "GET":
@@ -136,6 +133,42 @@ def get_likes(request, id):
             return Response(likes.count())
         except Like.DoesNotExist:
             return Response(0)
+=======
+    comments = GetCommentsForArticle(id)
+    serializer = CommentSerializer(comments, many=True)
+
+    return Response(serializer.data)
+
+
+@api_view(['POST', 'DELETE'])
+def comment(request, id):
+    if(request.method == 'POST'):
+        data = request.data
+        current_user = request.user
+        print(current_user.id)
+        print(data)
+        serializer = CommentAddSerializer(data=data)
+        
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+        else:
+            print(serializer.errors)
+            return Response(status=500)
+        return Response(status=200)
+    elif(request.method == 'DELETE'):
+        section = get_object_or_404(Comment, id=id)
+        section.delete()
+        return Response(status=200)
+    else:
+        return Response(status=500)
+
+@api_view(['POST'])
+def like(request):
+    data = request.data
+    serializer = LikesSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+>>>>>>> Stashed changes
     else:
         print("Attempted authentication with the wrong request method (not GET).")
         return redirect("/")
