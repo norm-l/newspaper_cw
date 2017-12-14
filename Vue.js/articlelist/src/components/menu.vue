@@ -231,7 +231,6 @@ export default {
 </script>
 
 <style scoped>
-
 input {
   margin-top: 5px;
 }

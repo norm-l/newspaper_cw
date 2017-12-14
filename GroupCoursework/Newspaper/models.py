@@ -1,17 +1,18 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 from django.conf import settings
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
-# Create your models here.
+
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         """
@@ -51,8 +52,8 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    name = models.CharField(max_length=50,null=True,blank=True)
-    phone = models.CharField(null=True,blank=True, max_length=10)
+    name = models.CharField(max_length=50, null=True, blank=True)
+    phone = models.CharField(null=True, blank=True, max_length=10)
     created = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -70,7 +71,7 @@ class User(AbstractBaseUser):
         # The user is identified by their email address
         return self.email
 
-    def __str__(self):              # __unicode__ on Python 2
+    def __str__(self):
         return self.email
 
     def has_perm(self, perm, obj=None):
@@ -88,6 +89,7 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
 
 class Article(models.Model):
     # The title of the Article
@@ -109,22 +111,26 @@ class Article(models.Model):
     # Likes
     likes = models.IntegerField()
     # Article objects are named by their title
+
     def __str__(self):
         return self.title
 
+
 class Comment (models.Model):
-    #FK User
+    # FK User
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    #FK Article
+    # FK Article
     article = models.ForeignKey('Article')
-    #User comment
+    # User comment
     content = models.TextField()
 
     def __str__(self):
         return self.content
-    
+
+
 class Like(models.Model):
-    profile = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    profile = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     liked_date = models.DateField(auto_now_add=True)
     liked = models.BooleanField()

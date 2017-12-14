@@ -91,7 +91,9 @@ export default {
           if (error.response.status === 401) {
             alert("Please login to delete a comment!");
           } else if (error.response.status === 404) {
-            alert("Either you're trying to delete a comment which does not exist or you are not the owner of the comment!");
+            alert(
+              "Either you're trying to delete a comment which does not exist or you are not the owner of the comment!"
+            );
           } else {
             console.log(error);
           }

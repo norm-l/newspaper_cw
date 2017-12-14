@@ -5,7 +5,6 @@ from .models import Article, User, Comment, Like
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    # likes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Article
         fields = ('id', 'title', 'author', 'content', 'article_img',
@@ -13,7 +12,6 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 
 class ArticleHeadlineSerializer(serializers.ModelSerializer):
-    # likes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Article
         fields = ('id', 'title', 'author', 'headline', 'article_img',
