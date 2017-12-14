@@ -6,18 +6,19 @@
     </b-nav>
     <b-container v-bind:class="{menuActive: isSubHidden }">
       <div v-if="loggedIn">
-        <b-row>
+        <b-row class="text-muted small mt-1">
           <b-col>
-            Email: {{user.username}}
+            E-Mail: <span class="text-info">{{user.username}}</span>
           </b-col>
           <b-col>
-            Name: {{user.name}}
+            Name: <span class="text-info">{{user.name}}</span>
           </b-col>
           <b-col>
-            Tel: {{user.tel}}
+            Phone Number: <span class="text-info">{{user.phone}}</span>
           </b-col>
           <b-col>
             <b-button v-on:click="LogOut" type="button" variant="danger">Logout</b-button>
+            <b-button v-b-modal.modalModify type="button" variant="warning">Modify</b-button>
           </b-col>
         </b-row>
       </div>
@@ -26,17 +27,14 @@
           <b-col>
             <b-form @submit.prevent="LogIn" inline novalidate validated>
               <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
-                <label class="sr-only" for="email" />
                 <b-form-input v-model="user.username" class="form-control" type="email" placeholder="E-Mail" required />
               </b-input-group>
               <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
                 <b-form-input v-model="user.password" type="password" placeholder="Password" required />
               </b-input-group>
               <b-button type="submit" variant="primary">Login</b-button>
+              <b-button class="ml-2" v-b-modal.modalPrevent>Register</b-button>
             </b-form>
-          </b-col>
-          <b-col>
-            <b-btn v-b-modal.modalPrevent>Register</b-btn>
           </b-col>
         </b-row>
       </div>
@@ -46,7 +44,13 @@
         <b-form-input type="email" class="form-control" placeholder="E-Mail" v-model="user.username" required />
         <b-form-input type="password" placeholder="Password" v-model="user.password" required />
         <b-form-input type="text" placeholder="Name" v-model="user.name" required />
-        <b-form-input type="tel" pattern="\d+" placeholder="Phone Number" v-model="user.phone" required />
+        <b-form-input type="tel" pattern="\d{7,10}" placeholder="Phone Number" v-model="user.phone" required />
+      </b-form>
+    </b-modal>
+    <b-modal id="modalModify" ref="modal_modify" title="Modify Information" @ok="handleModify">
+      <b-form @submit.stop.prevent="handleSubmit" novalidate validated>
+        <b-form-input type="text" placeholder="New Name" v-model="user.name" required />
+        <b-form-input type="tel" pattern="\d{7,10}" placeholder="New Phone Number" v-model="user.phone" required />
       </b-form>
     </b-modal>
   </div>
@@ -81,9 +85,8 @@ export default {
     if (this.$session.exists()) {
       // The session exists (user is not logged out) so we get the user details
       this.user = this.$session.get("user");
-      console.log(this.$session.getAll());
       axios.defaults.headers.common["Authorization"] =
-              "Token " + this.$session.get("token: ");
+        "Token " + this.$session.get("token: ");
       this.loggedIn = true;
     }
   },
@@ -91,6 +94,25 @@ export default {
   methods: {
     toggleSub: function(event) {
       this.isSubHidden = !this.isSubHidden;
+    },
+    handleModify() {
+      var config = {
+        headers: {
+          "content-type": "application/json",
+          "X-CSRFToken": csrftoken
+        }
+      };
+
+      axios
+        .post("/modify", JSON.stringify(this.TransformModify()), config)
+        .then(response => {
+          this.getUserDetails();
+          alert("Succesfully modified user!");
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      this.$refs.modal_modify.hide();
     },
     LogIn: function(event) {
       event.preventDefault();
@@ -109,21 +131,22 @@ export default {
         .then(response => {
           // If the response was successful and contains a token
           if (response.status === 200 && "token" in response.data) {
+            this.clearName();
             // Start a session
             this.$session.start();
             // Assign the jwt token from back-end to the session
             this.$session.set("token: ", response.data.token);
-            // Save user details to the session
-            this.$session.set("user", this.user);
             // Set the authorization header to the back-end token
             axios.defaults.headers.common["Authorization"] =
               "Token " + response.data.token;
+            // Assign user details
+            this.getUserDetails();
             // User is now logged in
             this.loggedIn = true;
           }
         })
         .catch(error => {
-          if (error.response.status === 403) {
+          if (error.response.status === 400) {
             alert("Invalid username and/or password!");
           } else {
             console.log(error);
@@ -135,13 +158,27 @@ export default {
       this.$session.destroy();
       this.clearName();
     },
+    getUserDetails() {
+      axios.get("/get_user_info").then(response => {
+        this.user.username = response.data.email;
+        this.user.name = response.data.name;
+        this.user.phone = response.data.phone;
+        this.$session.set("user", this.user);
+      });
+    },
     clearName() {
       this.user.username = "";
       this.user.password = "";
       this.user.name = "";
       this.user.phone = "";
     },
-    TransformRegister(){
+    TransformModify() {
+      var usr = {};
+      usr.name = this.user.name;
+      usr.phone = this.user.phone;
+      return usr;
+    },
+    TransformRegister() {
       var usr = {};
       usr.email = this.user.username;
       usr.password = this.user.password;
@@ -149,6 +186,14 @@ export default {
       usr.phone = this.user.phone;
 
       return usr;
+    },
+    handleModifyOk(evt) {
+      evt.preventDefault();
+      if (!this.user.username) {
+        alert("Please enter your email");
+      } else {
+        this.handleModify();
+      }
     },
     handleOk(evt) {
       // Prevent modal from closing
@@ -179,17 +224,19 @@ export default {
     },
     FilterCategory(category) {
       this.$emit("categoryChanged", category);
-    },
-
+    }
   }
 };
 </script>
 
 <style scoped>
+
+input {
+  margin-top: 5px;
+}
 .top-menu {
   width: 100vw;
 }
-
 .st {
   position: fixed;
   z-index: 200;
@@ -205,9 +252,9 @@ export default {
 
 .hover-element {
   display: inline-block;
-  background: #a5a5a5;
-  padding-top: 1.5em;
-  padding-bottom: 1em;
+  background: whitesmoke;
+  padding-top: 5px;
+  padding-bottom: 1px;
   font-size: 18pt;
 }
 

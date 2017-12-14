@@ -8,6 +8,7 @@ from rest_framework_jwt.settings import api_settings
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from Newspaper.models import User, Like, Comment
+from django.http import JsonResponse
 # UNUSED:
 # from django.http import HttpResponse
 # from rest_framework import status
@@ -78,32 +79,32 @@ def get_article(request, pk):
         return Response(status=400)
 
 
-@api_view(['POST'])
-def authentication(request):
-    if request.method == 'POST':
-        email = request.data['email']
-        password = request.data['password']
-        # Authenticate the user
-        user = authenticate(email=email, password=password)
+# @api_view(['POST'])
+# def authentication(request):
+#     if request.method == 'POST':
+#         email = request.data['email']
+#         password = request.data['password']
+#         # Authenticate the user
+#         user = authenticate(email=email, password=password)
 
-        # If user is not None
-        if user:
-            # And user is currently active
-            if user.is_active:
-                print("Authenticated user: ", user)
-                login(request, user)
-                # Return
-            # User is not active
-            else:
-                return Response("Account is disabled!")
-        # Wrong details
-        else:
-            print("Invalid login for user: ", user)
-            return Response(status=403)
-    # Login was attempted but not with POST
-    else:
-        print("Attempted authentication with the wrong request method (not POST).")
-        return redirect("/")
+#         # If user is not None
+#         if user:
+#             # And user is currently active
+#             if user.is_active:
+#                 print("Authenticated user: ", user)
+#                 login(request, user)
+#                 return Response(user.email)
+#             # User is not active
+#             else:
+#                 return Response("Account is disabled!")
+#         # Wrong details
+#         else:
+#             print("Invalid login for user: ", user)
+#             return Response(status=403)
+#     # Login was attempted but not with POST
+#     else:
+#         print("Attempted authentication with the wrong request method (not POST).")
+#         return redirect("/")
 
 
 @api_view(['POST'])
@@ -123,6 +124,25 @@ def register(request):
 def get_comments_for_article(request, id):
     if not id:
         return Response(status=500)
+
+@api_view(['GET'])
+def get_user_info(request):
+    if request.method == "GET":
+        return JsonResponse({'email': request.user.email, 'name': request.user.name, 'phone': request.user.phone})
+
+@api_view(['POST'])
+def modify_user(request):
+    if request.method == "POST":
+        data = request.data
+        serializer = RegisterSerializer(request.user, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response("Modified!")
+        else:
+            return Response("Error!")
+    else:
+        print("Attempted authentication with the wrong request method (not POST).")
+        return redirect("/")
 
 @api_view(['GET'])
 def get_likes(request, id):

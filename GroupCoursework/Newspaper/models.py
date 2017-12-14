@@ -52,7 +52,7 @@ class User(AbstractBaseUser):
         unique=True,
     )
     name = models.CharField(max_length=50,null=True,blank=True)
-    phone = models.BigIntegerField(null=True,blank=True)
+    phone = models.CharField(null=True,blank=True, max_length=10)
     created = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -104,9 +104,10 @@ class Article(models.Model):
     pub_date = models.DateTimeField('publication date')
     # The category of the article
     category = models.CharField(max_length=255)
-    # Tags TODO: Make this a list of strings
+    # Tags
     tags = models.CharField(max_length=255)
-
+    # Likes
+    likes = models.IntegerField()
     # Article objects are named by their title
     def __str__(self):
         return self.title
