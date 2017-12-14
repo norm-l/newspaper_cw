@@ -11,14 +11,10 @@ urlpatterns = [
     url(r'^register$', views.register, name='register'),
     url(r'^comment$', views.comment, name='comment'),
     url(r'^login$', authviews.obtain_auth_token),
-    url(r'^like/(?P<id>[\d]+)$', views.like, name='like'),
     url(r'^get_likes/(?P<id>[\d]+)$', views.get_likes, name='get_likes'),
-
     url(r'^like/(?P<id>[\d]+)/$', views.like, name='like'),
-
     url(r'^api/comments/(?P<id>[\d]+)/$',views.get_comments_for_article,name='get_comments_for_article'),
     url(r'^api/comment/(?P<id>[\d]+)/$',views.comment,name='comment'),
-    
     url(r'^get_user_info$', views.get_user_info, name='get_likes'),
     url(r'^modify$', views.modify_user, name='modify_user'),
 ]
