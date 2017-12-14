@@ -104,9 +104,10 @@ class Article(models.Model):
     pub_date = models.DateTimeField('publication date')
     # The category of the article
     category = models.CharField(max_length=255)
-    # Tags TODO: Make this a list of strings
+    # Tags
     tags = models.CharField(max_length=255)
-
+    # Likes
+    likes = models.IntegerField()
     # Article objects are named by their title
     def __str__(self):
         return self.title
