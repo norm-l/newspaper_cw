@@ -36,3 +36,7 @@ def GetCommentsForArticle(id):
    comments = Comment.objects.all().filter(article__id=id)
    return comments 
 
+def GetComment(id):
+   comment = Comment.objects.get(pk=id)
+   return comment 
+

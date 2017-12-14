@@ -55,11 +55,12 @@ export default {
       addComment(event){
         event.preventDefault();
         console.log(this.comment);
-        var c = {};
+        var c = {content: "" , article: null};
         c.content = this.comment;
+        c.article = this.articleId;
 
         axios
-        .post("/comment/" + this.articleId, JSON.stringify(c))
+        .post("/api/comment/" + this.articleId +"/", c)
         .then(response => {
           this.DisplayComments(this.da);
         })
@@ -86,7 +87,7 @@ export default {
       },
       DeleteComment(id){
         axios
-        .delete("/comment/" + this.articleId)
+        .delete("/api/comment/" + id)
         .then(response => {
           this.DisplayComments(this.da);
         })

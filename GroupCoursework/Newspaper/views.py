@@ -124,6 +124,11 @@ def register(request):
 def get_comments_for_article(request, id):
     if not id:
         return Response(status=500)
+    
+    comments = GetCommentsForArticle(id)
+    serializer = CommentSerializer(comments, many=True)
+    
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def get_user_info(request):
@@ -161,6 +166,7 @@ def get_likes(request, id):
 
 @api_view(['POST', 'DELETE'])
 def comment(request, id):
+    print("cyka")
     if(request.method == 'POST'):
         data = request.data
         current_user = request.user
@@ -175,7 +181,9 @@ def comment(request, id):
             return Response(status=500)
         return Response(status=200)
     elif(request.method == 'DELETE'):
-        section = get_object_or_404(Comment, id=id)
+        print(id)
+        section = get_object_or_404(Comment, id=id, user=request.user)
+        print(section)
         section.delete()
         return Response(status=200)
     else:
