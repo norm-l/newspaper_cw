@@ -13,4 +13,6 @@ urlpatterns = [
     url(r'^login$', authviews.obtain_auth_token),
     url(r'^like/(?P<id>[\d]+)$', views.like, name='like'),
     url(r'^get_likes/(?P<id>[\d]+)$', views.get_likes, name='get_likes'),
+    url(r'^get_user_info$', views.get_user_info, name='get_likes'),
+    url(r'^modify$', views.modify_user, name='modify_user'),
 ]

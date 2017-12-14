@@ -4,14 +4,16 @@ from rest_framework import serializers
 from .models import Article,User,Comment,Like
 
 class ArticleSerializer(serializers.ModelSerializer):
+    # likes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Article
-        fields = ('id' , 'title' , 'author' , 'content' , 'article_img' ,  'pub_date' , 'category' , 'tags')
+        fields = ('id' , 'title' , 'author' , 'content' , 'article_img' ,  'pub_date' , 'category' , 'tags', 'likes')
 
 class ArticleHeadlineSerializer(serializers.ModelSerializer):
+    # likes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Article
-        fields = ('id' , 'title' , 'author' , 'headline' , 'article_img' ,  'pub_date' , 'category' , 'tags')
+        fields = ('id' , 'title' , 'author' , 'headline' , 'article_img' ,  'pub_date' , 'category' , 'tags', 'likes')
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,6 +28,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
+        return user
+
+    def update(self, instance, validated_data):
+        user = User.objects.get(pk=instance.id)
+        User.objects.filter(pk=instance.id).update(**validated_data)
         return user
 
 class CommentSerializer(serializers.ModelSerializer):
