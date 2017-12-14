@@ -82,7 +82,7 @@ def register(request):
     if serializer.is_valid():
         serializer.save()
     else:
-        return Response(status=500)
+        return Response(status=400)
     return Response(status=200)
 
 
@@ -90,7 +90,7 @@ def register(request):
 @permission_classes((AllowAny, ))
 def get_comments_for_article(request, id):
     if not id:
-        return Response(status=500)
+        return Response(status=400)
 
     comments = GetCommentsForArticle(id)
     serializer = CommentSerializer(comments, many=True)
@@ -144,14 +144,14 @@ def comment(request, id):
             serializer.save(user=request.user)
         else:
             print(serializer.errors)
-            return Response(status=500)
+            return Response(status=400)
         return Response(status=200)
     elif(request.method == 'DELETE'):
         section = get_object_or_404(Comment, id=id, user=request.user)
         section.delete()
         return Response(status=200)
     else:
-        return Response(status=500)
+        return Response(status=400)
 
 
 @api_view(['POST'])

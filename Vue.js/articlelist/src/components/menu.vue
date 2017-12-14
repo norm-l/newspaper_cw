@@ -218,6 +218,7 @@ export default {
           alert("Succesfully registered! Please login");
         })
         .catch(error => {
+          alert("Email already in use");
           console.log(error);
         });
       this.clearName();
