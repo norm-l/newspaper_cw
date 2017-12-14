@@ -140,6 +140,15 @@ export default {
       this.user.name = "";
       this.user.phone = "";
     },
+    TransformRegister(){
+      var usr = {};
+      usr.email = this.user.username;
+      usr.password = this.user.password;
+      usr.name = this.user.name;
+      usr.phone = this.user.phone;
+
+      return usr;
+    },
     handleOk(evt) {
       // Prevent modal from closing
       evt.preventDefault();
@@ -157,7 +166,7 @@ export default {
         }
       };
       axios
-        .post("/register", JSON.stringify(this.user), config)
+        .post("/register", JSON.stringify(this.TransformRegister()), config)
         .then(response => {
           alert("Succesfully registered! Please login");
         })
@@ -169,7 +178,8 @@ export default {
     },
     FilterCategory(category) {
       this.$emit("categoryChanged", category);
-    }
+    },
+
   }
 };
 </script>
