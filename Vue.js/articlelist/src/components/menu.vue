@@ -146,7 +146,7 @@ export default {
           }
         })
         .catch(error => {
-          if (error.response.status === 403) {
+          if (error.response.status === 400) {
             alert("Invalid username and/or password!");
           } else {
             console.log(error);
