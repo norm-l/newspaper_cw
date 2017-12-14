@@ -104,43 +104,43 @@ export default {
     commentComponent
   },
   data() {
-    // return {
-    //   articles: [],
-    //   singleArticle: {},
-    //   sArticleId: 1,
-    //   readingList: true,
-    //   category: "Home"
-    // };
-    // For local use:
     return {
-      articles: [
-        {
-          id: "1",
-          title: "title1",
-          author: "author1",
-          pub_date: "February 2, 2017",
-          content: "Small text example",
-          category: "business",
-          likes: 10,
-          article_img: "./src/assets/default.png",
-          tags: "test, wow, nice"
-        }
-      ],
-      singleArticle:         {
-          id: "2",
-          title: "title1",
-          author: "author1",
-          pub_date: "February 2, 2017",
-          content: "Small text example",
-          category: "business",
-          likes: 10,
-          article_img: "./src/assets/default.png",
-          tags: "test, wow, nice"
-        },
-      readingList: false,
-      category: "Home",
+      articles: [],
+      singleArticle: {},
       sArticleId: 1,
+      readingList: true,
+      category: "Home"
     };
+    // For local use:
+    // return {
+    //   articles: [
+    //     {
+    //       id: "1",
+    //       title: "title1",
+    //       author: "author1",
+    //       pub_date: "February 2, 2017",
+    //       content: "Small text example",
+    //       category: "business",
+    //       likes: 10,
+    //       article_img: "./src/assets/default.png",
+    //       tags: "test, wow, nice"
+    //     }
+    //   ],
+    //   singleArticle:         {
+    //       id: "2",
+    //       title: "title1",
+    //       author: "author1",
+    //       pub_date: "February 2, 2017",
+    //       content: "Small text example",
+    //       category: "business",
+    //       likes: 10,
+    //       article_img: "./src/assets/default.png",
+    //       tags: "test, wow, nice"
+    //     },
+    //   readingList: false,
+    //   category: "Home",
+    //   sArticleId: 1,
+    // };
   },
   mounted: function() {
     axios
