@@ -30,17 +30,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-<<<<<<< HEAD
 class UserCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('name',)
-=======
     def update(self, instance, validated_data):
         user = User.objects.get(pk=instance.id)
         User.objects.filter(pk=instance.id).update(**validated_data)
         return user
->>>>>>> d546772df3d8f3ea26c4476ee342da67afe63804
 
 class CommentSerializer(serializers.ModelSerializer):
     user = UserCommentSerializer(many=False, read_only=True)
