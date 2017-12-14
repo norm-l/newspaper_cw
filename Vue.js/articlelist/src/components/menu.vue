@@ -6,15 +6,15 @@
     </b-nav>
     <b-container v-bind:class="{menuActive: isSubHidden }">
       <div v-if="loggedIn">
-        <b-row>
+        <b-row class="text-muted small mt-1">
           <b-col>
-            Email: {{user.username}}
+            E-Mail: <span class="text-info">{{user.username}}</span>
           </b-col>
           <b-col>
-            Name: {{user.name}}
+            Name: <span class="text-info">{{user.name}}</span>
           </b-col>
           <b-col>
-            Phone: {{user.phone}}
+            Phone Number: <span class="text-info">{{user.phone}}</span>
           </b-col>
           <b-col>
             <b-button v-on:click="LogOut" type="button" variant="danger">Logout</b-button>
@@ -33,10 +33,8 @@
                 <b-form-input v-model="user.password" type="password" placeholder="Password" required />
               </b-input-group>
               <b-button type="submit" variant="primary">Login</b-button>
+              <b-button class="ml-2" v-b-modal.modalPrevent>Register</b-button>
             </b-form>
-          </b-col>
-          <b-col>
-            <b-btn v-b-modal.modalPrevent>Register</b-btn>
           </b-col>
         </b-row>
       </div>
@@ -46,13 +44,13 @@
         <b-form-input type="email" class="form-control" placeholder="E-Mail" v-model="user.username" required />
         <b-form-input type="password" placeholder="Password" v-model="user.password" required />
         <b-form-input type="text" placeholder="Name" v-model="user.name" required />
-        <b-form-input type="tel" pattern="\d+" placeholder="Phone Number" v-model="user.phone" required />
+        <b-form-input type="tel" pattern="\d{7,10}" placeholder="Phone Number" v-model="user.phone" required />
       </b-form>
     </b-modal>
     <b-modal id="modalModify" ref="modal_modify" title="Modify Information" @ok="handleModify">
       <b-form @submit.stop.prevent="handleSubmit" novalidate validated>
         <b-form-input type="text" placeholder="New Name" v-model="user.name" required />
-        <b-form-input type="tel" pattern="\d+" placeholder="New Phone Number" v-model="user.phone" required />
+        <b-form-input type="tel" pattern="\d{7,10}" placeholder="New Phone Number" v-model="user.phone" required />
       </b-form>
     </b-modal>
   </div>
@@ -254,9 +252,9 @@ input {
 
 .hover-element {
   display: inline-block;
-  background: #a5a5a5;
-  padding-top: 1.5em;
-  padding-bottom: 1em;
+  background: whitesmoke;
+  padding-top: 5px;
+  padding-bottom: 1px;
   font-size: 18pt;
 }
 

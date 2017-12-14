@@ -52,7 +52,7 @@ class User(AbstractBaseUser):
         unique=True,
     )
     name = models.CharField(max_length=50,null=True,blank=True)
-    phone = models.BigIntegerField(null=True,blank=True)
+    phone = models.CharField(null=True,blank=True, max_length=10)
     created = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
