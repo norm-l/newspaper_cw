@@ -104,43 +104,43 @@ export default {
     commentComponent
   },
   data() {
-    // return {
-    //   articles: [],
-    //   singleArticle: {},
-    //   sArticleId: 1,
-    //   readingList: true,
-    //   category: "Home"
-    // }
-    // For local use:
     return {
-      articles: [
-        {
-          id: "1",
-          title: "title1",
-          author: "author1",
-          pub_date: "February 2, 2017",
-          content: "Small text example",
-          category: "business",
-          likes: 10,
-          article_img: "./src/assets/default.png",
-          tags: "test, wow, nice"
-        }
-      ],
-      singleArticle:         {
-          id: "2",
-          title: "title1",
-          author: "author1",
-          pub_date: "February 2, 2017",
-          content: "Small text example",
-          category: "business",
-          likes: 10,
-          article_img: "./src/assets/default.png",
-          tags: "test, wow, nice"
-        },
-      readingList: false,
-      category: "Home",
+      articles: [],
+      singleArticle: {},
       sArticleId: 1,
+      readingList: true,
+      category: "Home"
     };
+    // For local use:
+    // return {
+    //   articles: [
+    //     {
+    //       id: "1",
+    //       title: "title1",
+    //       author: "author1",
+    //       pub_date: "February 2, 2017",
+    //       content: "Small text example",
+    //       category: "business",
+    //       likes: 10,
+    //       article_img: "./src/assets/default.png",
+    //       tags: "test, wow, nice"
+    //     }
+    //   ],
+    //   singleArticle:         {
+    //       id: "2",
+    //       title: "title1",
+    //       author: "author1",
+    //       pub_date: "February 2, 2017",
+    //       content: "Small text example",
+    //       category: "business",
+    //       likes: 10,
+    //       article_img: "./src/assets/default.png",
+    //       tags: "test, wow, nice"
+    //     },
+    //   readingList: false,
+    //   category: "Home",
+    //   sArticleId: 1,
+    // };
   },
   mounted: function() {
     axios
@@ -148,6 +148,10 @@ export default {
       .then(response => {
         this.articles = response.data;
         this.readingList = true;
+
+        this.articles.forEach(article => {
+          this.GetLikes(article.id);
+        });
       })
       .catch(err => {
         console.log(err);
@@ -164,14 +168,35 @@ export default {
     }
   },
   methods: {
+    GetLikes(id) {
+      axios
+        .get("/get_likes/" + id)
+        .then(response => {
+          this.articles.forEach(function(article) {
+            if (article.id === id) {
+              article.likes = response.data;
+            }
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     splitTags(tags) {
       return tags.split(", ");
     },
     LikeArticle(id) {
       axios
         .post("/like/" + id)
-        .catch(err => {
-          console.log(err);
+        .then(response => {
+          this.GetLikes(id);
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            alert("Please login to like articles!");
+          } else {
+            console.log(error);
+          }
         });
     },
     ReadArticle(id) {

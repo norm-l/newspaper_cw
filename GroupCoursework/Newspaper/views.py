@@ -145,6 +145,7 @@ def modify_user(request):
         return redirect("/")
 
 @api_view(['GET'])
+@permission_classes((AllowAny, ))
 def get_likes(request, id):
     if request.method == "GET":
         try:

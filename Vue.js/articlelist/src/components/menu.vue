@@ -157,6 +157,7 @@ export default {
       this.loggedIn = false;
       this.$session.destroy();
       this.clearName();
+      location.reload();
     },
     getUserDetails() {
       axios.get("/get_user_info").then(response => {
