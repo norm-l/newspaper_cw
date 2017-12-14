@@ -124,7 +124,6 @@ def get_comments_for_article(request, id):
     if not id:
         return Response(status=500)
 
-<<<<<<< Updated upstream
 @api_view(['GET'])
 def get_likes(request, id):
     if request.method == "GET":
@@ -133,7 +132,6 @@ def get_likes(request, id):
             return Response(likes.count())
         except Like.DoesNotExist:
             return Response(0)
-=======
     comments = GetCommentsForArticle(id)
     serializer = CommentSerializer(comments, many=True)
 
@@ -168,7 +166,6 @@ def like(request):
     serializer = LikesSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
->>>>>>> Stashed changes
     else:
         print("Attempted authentication with the wrong request method (not GET).")
         return redirect("/")
