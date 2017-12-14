@@ -74,7 +74,7 @@
               </div>
             </div>
             <!-- Back to articles the full article -->
-            <button class="btn btn-success float-right mb-3" v-on:click="BackToList()">Back to articles</button>
+            <button class="btn btn-success float-right mb-3" v-on:click="BackToList(singleArticle.id)">Back</button>
             <ul class="list-unstyled mt-2">
               <!-- Article Tags -->
               <li>
@@ -83,7 +83,7 @@
               </li>
               <!-- Article Likes -->
               <li>
-                <icon name="thumbs-up" />
+                <span class="like_button" v-on:click="LikeArticle(singleArticle.id, true)"><icon name="thumbs-up" /></span>
                 <span class="badge badge-success ml-1" v-text="singleArticle.likes" />
               </li>
             </ul>
@@ -104,43 +104,43 @@ export default {
     commentComponent
   },
   data() {
-    return {
-      articles: [],
-      singleArticle: {},
-      sArticleId: 1,
-      readingList: true,
-      category: "Home"
-    };
-    // For local use:
     // return {
-    //   articles: [
-    //     {
-    //       id: "1",
-    //       title: "title1",
-    //       author: "author1",
-    //       pub_date: "February 2, 2017",
-    //       content: "Small text example",
-    //       category: "business",
-    //       likes: 10,
-    //       article_img: "./src/assets/default.png",
-    //       tags: "test, wow, nice"
-    //     }
-    //   ],
-    //   singleArticle:         {
-    //       id: "2",
-    //       title: "title1",
-    //       author: "author1",
-    //       pub_date: "February 2, 2017",
-    //       content: "Small text example",
-    //       category: "business",
-    //       likes: 10,
-    //       article_img: "./src/assets/default.png",
-    //       tags: "test, wow, nice"
-    //     },
-    //   readingList: false,
-    //   category: "Home",
+    //   articles: [],
+    //   singleArticle: {},
     //   sArticleId: 1,
+    //   readingList: true,
+    //   category: "Home"
     // };
+    // For local use:
+    return {
+      articles: [
+        {
+          id: "1",
+          title: "title1",
+          author: "author1",
+          pub_date: "February 2, 2017",
+          content: "Small text example",
+          category: "business",
+          likes: 10,
+          article_img: "./src/assets/default.png",
+          tags: "test, wow, nice"
+        }
+      ],
+      singleArticle:         {
+          id: "2",
+          title: "title1",
+          author: "author1",
+          pub_date: "February 2, 2017",
+          content: "Small text example",
+          category: "business",
+          likes: 10,
+          article_img: "./src/assets/default.png",
+          tags: "test, wow, nice"
+        },
+      readingList: false,
+      category: "Home",
+      sArticleId: 1,
+    };
   },
   mounted: function() {
     axios
@@ -150,7 +150,7 @@ export default {
         this.readingList = true;
 
         this.articles.forEach(article => {
-          this.GetLikes(article.id);
+          this.GetLikes(article.id, false);
         });
       })
       .catch(err => {
@@ -168,15 +168,19 @@ export default {
     }
   },
   methods: {
-    GetLikes(id) {
+    GetLikes(id, is_single) {
       axios
         .get("/get_likes/" + id)
         .then(response => {
-          this.articles.forEach(function(article) {
-            if (article.id === id) {
-              article.likes = response.data;
-            }
-          });
+          if (is_single) {
+            this.singleArticle.likes = response.data;
+          } else {
+            this.articles.forEach(function(article) {
+              if (article.id === id) {
+                article.likes = response.data;
+              }
+            });
+          }
         })
         .catch(err => {
           console.log(err);
@@ -185,11 +189,15 @@ export default {
     splitTags(tags) {
       return tags.split(", ");
     },
-    LikeArticle(id) {
+    LikeArticle(id, is_single) {
       axios
         .post("/like/" + id)
         .then(response => {
-          this.GetLikes(id);
+          if (is_single) {
+            this.GetLikes(id, true);
+          } else {
+            this.GetLikes(id, false);
+          }
         })
         .catch(error => {
           if (error.response.status === 401) {
@@ -204,17 +212,17 @@ export default {
         .get("/api/article/" + id)
         .then(response => {
           this.singleArticle = response.data;
-          console.log(this.singleArticle.id);
+          this.GetLikes(id, true);
           this.sArticleId = this.singleArticle.id;
-          console.log(this.sArticleId);
           this.readingList = false;
         })
         .catch(err => {
           console.log(err);
         });
     },
-    BackToList() {
+    BackToList(id) {
       this.GetLatestArticles(this.category);
+      // this.GetLikes(id, false);
     },
     GetLatestArticles(category) {
       if (category == "Home") {
@@ -224,6 +232,10 @@ export default {
             this.articles = response.data;
             this.singleArticle = {};
             this.readingList = true;
+
+            this.articles.forEach(article => {
+              this.GetLikes(article.id, false);
+            });
           })
           .catch(err => {
             console.log(err);

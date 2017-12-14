@@ -166,14 +166,10 @@ def get_likes(request, id):
 
 @api_view(['POST', 'DELETE'])
 def comment(request, id):
-    print("cyka")
     if(request.method == 'POST'):
         data = request.data
         current_user = request.user
-        print(current_user.id)
-        print(data)
         serializer = CommentAddSerializer(data=data)
-        
         if serializer.is_valid():
             serializer.save(user=request.user)
         else:
@@ -181,9 +177,7 @@ def comment(request, id):
             return Response(status=500)
         return Response(status=200)
     elif(request.method == 'DELETE'):
-        print(id)
         section = get_object_or_404(Comment, id=id, user=request.user)
-        print(section)
         section.delete()
         return Response(status=200)
     else:
