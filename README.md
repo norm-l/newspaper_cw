@@ -1,6 +1,4 @@
-# Group 20
-
-ECS639 Group Coursework: An Online Newspaper
+# ECS639 Group Coursework: An Online Newspaper
 
 ## Built With
 
@@ -9,6 +7,4 @@ ECS639 Group Coursework: An Online Newspaper
 
 ## Authors
 
-* **Kobalasingam, Ageeban** - [E-Mail](mailto:a.kobalasingam@se14.qmul.ac.uk)
-* **Normantas, Lukas** - [E-Mail](mailto:l.normantas@se14.qmul.ac.uk)
-* **Pogonowski, Andrzej** - [E-Mail](mailto:a.pogonowski@se14.qmul.ac.uk)
+Created by 2 students studying Web Programming.
